@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "categories")
+@Table(name = "categories", schema = "esg-schema")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

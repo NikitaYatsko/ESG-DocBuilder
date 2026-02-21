@@ -1,10 +1,4 @@
-CREATE TYPE type_of_unit_enum AS ENUM (
-    'pcs',
-    'm',
-    'm2',
-    'set',
-    'job'
-    );
+
 create table categories
 (
     id   bigserial primary key,
@@ -19,7 +13,7 @@ CREATE TABLE products
     category_id    bigint references categories (id) not null,
     created_at     TIMESTAMP                         NOT NULL DEFAULT now(),
     updated_at     TIMESTAMP                         NOT NULL DEFAULT now(),
-    type_of_unit   type_of_unit_enum                 not null
+    type_of_unit   varchar(255)                not null
 );
 
 

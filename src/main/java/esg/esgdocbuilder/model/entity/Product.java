@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "products")
+@Table(name = "products", schema = "esg-schema")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class Product {
     @Column(name = "sell_price")
     private BigDecimal sellPrice;
     @ManyToOne
-    @JoinColumn(name = "category_id",nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)

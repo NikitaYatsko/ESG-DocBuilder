@@ -13,7 +13,7 @@ public class ProductResponse {
     private String generalData;
     private BigDecimal purchasePrice;
     private BigDecimal sellPrice;
-    private Category category;
+    private String categoryName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private TypeOfUnitEnum typeOfUnit;

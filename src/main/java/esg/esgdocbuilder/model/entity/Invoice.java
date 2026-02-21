@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "invoice")
+@Table(name = "invoice",schema = "esg-schema")
 public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
