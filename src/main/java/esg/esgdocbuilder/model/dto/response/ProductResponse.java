@@ -1,6 +1,5 @@
 package esg.esgdocbuilder.model.dto.response;
 
-import esg.esgdocbuilder.model.entity.Category;
 import esg.esgdocbuilder.model.enums.TypeOfUnitEnum;
 import lombok.Data;
 
