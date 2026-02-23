@@ -21,13 +21,13 @@ public class UserServiceDetails implements UserDetailsService {
     //private final RoleRepository repository;
 
     public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findByEmail(username);
     }
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = findByUsername(email).orElseThrow(() -> new UsernameNotFoundException(
                 ApiErrorMessage.USER_DOES_NOT_EXIST.getMessage()
         ));
         return new org.springframework.security.core.userdetails.User(
@@ -40,4 +40,5 @@ public class UserServiceDetails implements UserDetailsService {
 
     }
 
-}*/
+}
+*/
