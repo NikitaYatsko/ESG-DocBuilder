@@ -1,5 +1,6 @@
 package esg.esgdocbuilder.service.impl;
 
+import esg.esgdocbuilder.constants.ApiErrorMessage;
 import esg.esgdocbuilder.model.dto.RoleDTO;
 import esg.esgdocbuilder.model.dto.request.LoginRequest;
 import esg.esgdocbuilder.model.dto.response.UserProfileDTO;
@@ -40,11 +41,11 @@ public class AuthServiceImpl implements AuthService {
                     )
             );
         } catch (BadCredentialsException e) {
-            throw new BadCredentialsException("Invalid email or password");
+            throw new BadCredentialsException(ApiErrorMessage.BAD_CREDENTIALS.getMessage());
         }
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new BadCredentialsException("User not found"));
+                .orElseThrow(() -> new BadCredentialsException(ApiErrorMessage.USER_DOES_NOT_EXIST.getMessage()));
 
         UserDetails userDetails =
                 userServiceDetails.loadUserByUsername(request.getEmail());
@@ -52,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
         String token = jwtTokenUtils.generateToken(userDetails);
 
         List<RoleDTO> roles = user.getRoles().stream()
-                .map(role -> new RoleDTO( role.getName()))
+                .map(role -> new RoleDTO(role.getName()))
                 .collect(Collectors.toList());
 
         return new UserProfileDTO(

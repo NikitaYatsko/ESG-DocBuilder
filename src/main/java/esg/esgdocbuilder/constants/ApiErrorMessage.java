@@ -12,6 +12,7 @@ public enum ApiErrorMessage {
     CATEGORY_NOT_FOUND("Category not found"),
     USER_DOES_NOT_EXIST("User doesn't exist"),
     TOKEN_EXPIRED("Token expired"),
+    BAD_CREDENTIALS("Invalid Email or password"),
     ;
 
 
