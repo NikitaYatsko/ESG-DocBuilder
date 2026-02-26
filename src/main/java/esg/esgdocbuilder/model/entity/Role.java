@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-@Table(name = "roles")
+@Table(name = "roles", schema = "esg-schema")
 @Entity
 public class Role {
 
