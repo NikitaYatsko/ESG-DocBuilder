@@ -5,7 +5,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
-@Table(name = "invoice_item",schema = "esg-schema")
+@Table(name = "invoice_item",schema = "esgschema")
 @Entity
 @Data
 public class InvoiceItem {

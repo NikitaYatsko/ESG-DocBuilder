@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@Table(name = "users", schema = "esg-schema")
+@Table(name = "users", schema = "esgschema")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ public class User {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_roles",
-            schema = "esg-schema",
+            schema = "esgschema",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )

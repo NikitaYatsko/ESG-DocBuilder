@@ -1,4 +1,3 @@
-/*
 package esg.esgdocbuilder.service.impl;
 
 import esg.esgdocbuilder.constants.ApiErrorMessage;
@@ -51,4 +50,4 @@ public class ProductServiceImpl implements ProductService {
         List<Product> products = productRepository.findAll();
         return products.stream().map(productMapper::toResponse).collect(Collectors.toList());
     }
-}*/
+}

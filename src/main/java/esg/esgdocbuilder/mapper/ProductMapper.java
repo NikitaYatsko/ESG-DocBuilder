@@ -1,39 +1,39 @@
-/*
 package esg.esgdocbuilder.mapper;
 
+import esg.esgdocbuilder.model.dto.request.LoginRequest;
 import esg.esgdocbuilder.model.dto.request.NewProductRequest;
 import esg.esgdocbuilder.model.dto.response.ProductResponse;
-import esg.esgdocbuilder.model.entity.Product;
 import esg.esgdocbuilder.model.entity.Category;
+import esg.esgdocbuilder.model.entity.Product;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProductMapper {
 
-    public  Product toEntity(NewProductRequest request, Category category) {
-        Product product = new Product();
 
-        product.setGeneralData(request.getGeneralData());
-        product.setPurchasePrice(request.getPurchasePrice());
-        product.setSellPrice(request.getSellPrice());
-        product.setCategory(category);
-        product.setTypeOfUnit(request.getTypeOfUnit());
+    public ProductResponse toResponse(Product product) {
+        if (product == null) return null;
 
-        return product;
-    }
-
-    public  ProductResponse toResponse(Product product) {
         ProductResponse response = new ProductResponse();
-
         response.setId(product.getId());
-        response.setGeneralData(product.getGeneralData());
-        response.setPurchasePrice(product.getPurchasePrice());
-        response.setSellPrice(product.getSellPrice());
-        response.setCategoryName(product.getCategory().getName());
+        response.setName(product.getName());
+        response.setTypeOfUnit(product.getTypeOfUnit());
+        response.setCategory(product.getCategory().getName());
         response.setCreatedAt(product.getCreatedAt());
         response.setUpdatedAt(product.getUpdatedAt());
-        response.setTypeOfUnit(product.getTypeOfUnit());
 
         return response;
     }
-}*/
+    public Product toEntity(NewProductRequest newProductRequest, Category category) {
+        if (newProductRequest == null) return null;
+        Product product = new Product();
+        product.setName(newProductRequest.getName());
+        product.setTypeOfUnit(newProductRequest.getTypeOfUnit());
+        product.setCategory(category);
+        product.setCostPrice(newProductRequest.getCostPrice());
+        product.setMarkupPercent(newProductRequest.getMarkupPercent());
+        product.setHasVat(newProductRequest.getHasVat());
+        return product;
+
+    }
+}

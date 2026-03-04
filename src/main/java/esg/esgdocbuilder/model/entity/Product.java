@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "products", schema = "esg-schema")
+@Table(name = "products", schema = "esgschema")
 public class Product {
 
     @Id
@@ -23,7 +23,7 @@ public class Product {
 
     // Себестоимость
     @Column(name = "cost_price", nullable = false, precision = 12, scale = 2)
-    private BigDecimal purchasePrice;
+    private BigDecimal costPrice;
 
     // Наценка %
     @Column(name = "markup_percent", nullable = false, precision = 6, scale = 2)
