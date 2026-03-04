@@ -1,3 +1,4 @@
+/*
 package esg.esgdocbuilder.controller;
 
 import esg.esgdocbuilder.model.dto.request.NewProductRequest;
@@ -34,4 +35,4 @@ public class ProductController {
 
         return ResponseEntity.ok(productService.createProduct(request));
     }
-}
+}*/

@@ -1,4 +1,3 @@
-
 create table categories
 (
     id   bigserial primary key,
@@ -7,14 +6,23 @@ create table categories
 CREATE TABLE products
 (
     id             BIGSERIAL PRIMARY KEY,
-    general_data   TEXT                              NOT NULL,
-    purchase_price NUMERIC(10, 2) CHECK (purchase_price >= 0),
-    sell_price     NUMERIC(10, 2) CHECK (sell_price >= 0),
-    category_id    bigint references categories (id) not null,
-    created_at     TIMESTAMP                         NOT NULL DEFAULT now(),
-    updated_at     TIMESTAMP                         NOT NULL DEFAULT now(),
-    type_of_unit   varchar(255)                not null
+
+    name           VARCHAR(255)   NOT NULL,              -- Наименование товара
+    category_id    bigint references categories (id),
+
+    has_vat        BOOLEAN        NOT NULL DEFAULT true, -- НДС (да/нет)
+
+    cost_price     NUMERIC(12, 2) NOT NULL CHECK (cost_price >= 0),
+    -- Себестоимость
+
+    markup_percent NUMERIC(6, 2)  NOT NULL CHECK (markup_percent >= 0),
+    -- Наценка в процентах
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+
+    created_at     TIMESTAMP               DEFAULT CURRENT_TIMESTAMP,
+    type_of_unit   varchar(50)    not null
 );
+
 
 
 CREATE TABLE users

@@ -1,3 +1,4 @@
+/*
 package esg.esgdocbuilder.mapper;
 
 import esg.esgdocbuilder.model.dto.request.NewProductRequest;
@@ -35,4 +36,4 @@ public class ProductMapper {
 
         return response;
     }
-}
+}*/
