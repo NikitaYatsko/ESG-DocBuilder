@@ -31,25 +31,18 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public UserProfileResponse getUserProfile() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserDoesNotExistsException(ApiErrorMessage.USER_DOES_NOT_EXIST.getMessage()));
-
-        return userMapper.getUserProfile(user);
+        return userMapper.getUserProfile(getCurrentUser());
     }
 
     @Override
     public UserProfileResponse uploadUserPhoto(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            throw new FileIsEmptyException(ApiErrorMessage.FILE_IS_EMPTY.getMessage());
+        }
+
+        User user = getCurrentUser();
+
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String email = authentication.getName();
-            User user = userRepository.findByEmail(email).orElseThrow(
-                    () -> new UserDoesNotExistsException(ApiErrorMessage.USER_DOES_NOT_EXIST.getMessage())
-            );
-            if (file == null || file.isEmpty()) {
-                throw new FileIsEmptyException(ApiErrorMessage.FILE_IS_EMPTY.getMessage());
-            }
             Map<String, Object> uploadResult = cloudinary.uploader().upload(
                     file.getBytes(),
                     ObjectUtils.asMap("folder", "user_photos")
@@ -59,9 +52,13 @@ public class UserProfileServiceImpl implements UserProfileService {
             userRepository.save(user);
             return userMapper.getUserProfile(user);
         } catch (IOException e) {
-            e.printStackTrace();
             throw new RuntimeException("Failed to upload photo", e);
         }
+    }
 
+    private User getCurrentUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserDoesNotExistsException(ApiErrorMessage.USER_DOES_NOT_EXIST.getMessage()));
     }
 }
