@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserProfileDTO {
+public class UserAuthResponse {
 
     private String email;
     private String fullName;

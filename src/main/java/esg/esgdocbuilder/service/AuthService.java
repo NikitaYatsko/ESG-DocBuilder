@@ -1,9 +1,9 @@
 package esg.esgdocbuilder.service;
 
 import esg.esgdocbuilder.model.dto.request.LoginRequest;
-import esg.esgdocbuilder.model.dto.response.UserProfileDTO;
+import esg.esgdocbuilder.model.dto.response.UserAuthResponse;
 
 public interface AuthService
 {
-    UserProfileDTO login(LoginRequest request);
+    UserAuthResponse login(LoginRequest request);
 }

@@ -13,6 +13,7 @@ public enum ApiErrorMessage {
     USER_DOES_NOT_EXIST("User doesn't exist"),
     TOKEN_EXPIRED("Token expired"),
     BAD_CREDENTIALS("Invalid Email or password"),
+    FILE_IS_EMPTY("File is empty"),
     ;
 
 

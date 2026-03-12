@@ -3,7 +3,7 @@ package esg.esgdocbuilder.service.impl;
 import esg.esgdocbuilder.constants.ApiErrorMessage;
 import esg.esgdocbuilder.model.dto.RoleDTO;
 import esg.esgdocbuilder.model.dto.request.LoginRequest;
-import esg.esgdocbuilder.model.dto.response.UserProfileDTO;
+import esg.esgdocbuilder.model.dto.response.UserAuthResponse;
 import esg.esgdocbuilder.model.entity.User;
 import esg.esgdocbuilder.repository.UserRepository;
 import esg.esgdocbuilder.security.JwtTokenUtils;
@@ -12,12 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -31,7 +29,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
 
     @Override
-    public UserProfileDTO login(LoginRequest request) {
+    public UserAuthResponse login(LoginRequest request) {
 
         try {
             authenticationManager.authenticate(
@@ -56,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
                 .map(role -> new RoleDTO(role.getName()))
                 .collect(Collectors.toList());
 
-        return new UserProfileDTO(
+        return new UserAuthResponse(
                 user.getEmail(),
                 user.getFullName(),
                 token,

@@ -1,7 +1,7 @@
 package esg.esgdocbuilder.controller;
 
 import esg.esgdocbuilder.model.dto.request.LoginRequest;
-import esg.esgdocbuilder.model.dto.response.UserProfileDTO;
+import esg.esgdocbuilder.model.dto.response.UserAuthResponse;
 import esg.esgdocbuilder.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +18,10 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<UserProfileDTO> login(
+    public ResponseEntity<UserAuthResponse> login(
             @Valid @RequestBody LoginRequest request
     ) {
-        UserProfileDTO response = authService.login(request);
+        UserAuthResponse response = authService.login(request);
         return ResponseEntity.ok(response);
 
     }

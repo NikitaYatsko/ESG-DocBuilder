@@ -25,7 +25,10 @@ public class User {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
-
+    @Column(name = "user_photo")
+    private String imageUrl;
+    @Column(name = "phone")
+    private String phone;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_roles",
