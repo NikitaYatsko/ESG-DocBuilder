@@ -18,8 +18,6 @@ public class InvoiceItem {
     @ManyToOne
     @JoinColumn(name = "product_id",nullable = false)
     private Product product;
-    @Column(name = "vat_rate", nullable = false)
-    private BigDecimal vatRate;
     @Column(name = "quantity", nullable = false)
     private BigDecimal quantity;
     @Column(name = "unit_price", nullable = false)

@@ -29,6 +29,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
 
+
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 

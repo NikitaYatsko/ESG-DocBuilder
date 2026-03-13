@@ -21,33 +21,31 @@ public class Product {
     @Column(name = "name", nullable = false)
     private String name;
 
-    // Себестоимость
-    @Column(name = "cost_price", nullable = false, precision = 12, scale = 2)
-    private BigDecimal costPrice;
-
-    // Наценка %
-    @Column(name = "markup_percent", nullable = false, precision = 6, scale = 2)
-    private BigDecimal markupPercent;
-
-    // Есть ли НДС
-    @Column(name = "has_vat", nullable = false)
-    private Boolean hasVat;
-
-    // Единица измерения
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type_of_unit", nullable = false)
-    private TypeOfUnitEnum typeOfUnit;
-
-    // Категория
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @Column(name = "cost_price", nullable = false, precision = 12, scale = 2)
+    private BigDecimal costPrice;
+
+    @Column(name = "sell_price", nullable = false, precision = 12, scale = 2)
+    private BigDecimal sellPrice;
+
+    @Column(name = "marginality", nullable = false, precision = 5, scale = 2)
+    private BigDecimal marginality;
+
+    @Column(name = "vat")
+    private BigDecimal vat;
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type_of_unit", nullable = false)
+    private TypeOfUnitEnum typeOfUnit;
+
 }

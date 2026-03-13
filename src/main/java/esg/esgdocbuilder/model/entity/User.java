@@ -25,7 +25,7 @@ public class User {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
-    @Column(name = "user_photo")
+    @Column(name = "image_url")
     private String imageUrl;
     @Column(name = "phone")
     private String phone;
