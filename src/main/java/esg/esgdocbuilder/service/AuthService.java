@@ -6,4 +6,5 @@ import esg.esgdocbuilder.model.dto.response.UserAuthResponse;
 public interface AuthService
 {
     UserAuthResponse login(LoginRequest request);
+    UserAuthResponse refreshAccessToken(String refreshToken);
 }

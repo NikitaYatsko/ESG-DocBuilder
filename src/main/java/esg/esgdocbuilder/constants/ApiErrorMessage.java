@@ -14,6 +14,7 @@ public enum ApiErrorMessage {
     TOKEN_EXPIRED("Token expired"),
     BAD_CREDENTIALS("Invalid Email or password"),
     FILE_IS_EMPTY("File is empty"),
+    REFRESH_TOKEN_NOT_FOUND("Refresh token not found"),
     ;
 
 

@@ -96,3 +96,4 @@ INSERT INTO esgschema.categories (name)
 VALUES ('Трасса / Опоры / Земляные работы');
 INSERT INTO esgschema.categories (name)
 VALUES ('Щитовые работы и замена');
+
