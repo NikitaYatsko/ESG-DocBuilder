@@ -40,9 +40,4 @@ public class InvoiceMapper {
         return response;
     }
 
-    public Invoice toEntity(InvoiceRequest request) {
-        if (request == null) return null;
-
-        return new Invoice();
-    }
 }
