@@ -1,0 +1,13 @@
+package esg.esgdocbuilder.config;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+public class Main {
+    public static void main(String[] args) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String password = "hardestpasswordever";
+        String encoded = passwordEncoder.encode(password);
+        System.out.println(encoded);
+    }
+}
