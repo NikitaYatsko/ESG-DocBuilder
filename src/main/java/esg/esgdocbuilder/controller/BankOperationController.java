@@ -1,14 +1,12 @@
 package esg.esgdocbuilder.controller;
 
+import esg.esgdocbuilder.model.dto.AccountDTO;
 import esg.esgdocbuilder.model.dto.request.BankOperationRequest;
 import esg.esgdocbuilder.model.dto.response.BankOperationResponse;
 import esg.esgdocbuilder.service.BankOperationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,8 +17,14 @@ public class BankOperationController {
 
     private final BankOperationService bankOperationService;
 
+    @GetMapping("/accounts")
+    public ResponseEntity<List<AccountDTO>> getAllOperations() {
+        return ResponseEntity.ok(bankOperationService.getAllAccounts());
+    }
+
+    @GetMapping("/operations")
     public ResponseEntity<List<BankOperationResponse>> getAllBankOperations() {
-        return null;
+        return ResponseEntity.ok(bankOperationService.getAllOperations());
     }
 
     @PostMapping("/create-operation")

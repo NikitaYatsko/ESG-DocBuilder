@@ -3,11 +3,11 @@ package esg.esgdocbuilder.service.impl;
 import esg.esgdocbuilder.constants.ApiErrorMessage;
 import esg.esgdocbuilder.exception.exceptions.AccountNotFoundException;
 import esg.esgdocbuilder.mapper.BankOperationMapper;
+import esg.esgdocbuilder.model.dto.AccountDTO;
 import esg.esgdocbuilder.model.dto.request.BankOperationRequest;
 import esg.esgdocbuilder.model.dto.response.BankOperationResponse;
 import esg.esgdocbuilder.model.entity.Account;
 import esg.esgdocbuilder.model.entity.BankOperation;
-
 import esg.esgdocbuilder.model.enums.TypeOfOperationEnums;
 import esg.esgdocbuilder.repository.AccountRepository;
 import esg.esgdocbuilder.repository.BankOperationRepository;
@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +45,14 @@ public class BankOperationServiceImpl implements BankOperationService {
     }
 
     @Override
-    public List<BankOperationRequest> getAllOperations() {
-        return List.of();
+    public List<BankOperationResponse> getAllOperations() {
+        List<BankOperation> bankOperations = bankOperationRepository.findAll();
+        return bankOperations.stream().map(bankOperationMapper::toResponse).toList();
+    }
+
+    @Override
+    public List<AccountDTO> getAllAccounts() {
+        List<Account> accounts = accountRepository.findAll();
+        return accounts.stream().map(bankOperationMapper::toDTO).toList();
     }
 }

@@ -1,5 +1,6 @@
 package esg.esgdocbuilder.mapper;
 
+import esg.esgdocbuilder.model.dto.AccountDTO;
 import esg.esgdocbuilder.model.dto.request.BankOperationRequest;
 import esg.esgdocbuilder.model.dto.response.BankOperationResponse;
 import esg.esgdocbuilder.model.entity.Account;
@@ -24,6 +25,13 @@ public class BankOperationMapper {
                 .amount(bankOperationRequest.getAmount())
                 .account(account)
                 .comment(bankOperationRequest.getComment())
+                .build();
+    }
+
+    public AccountDTO toDTO(Account account) {
+        return AccountDTO.builder()
+                .name(account.getName())
+                .balance(account.getBalance())
                 .build();
     }
 }
