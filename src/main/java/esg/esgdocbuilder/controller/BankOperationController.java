@@ -18,7 +18,7 @@ public class BankOperationController {
     private final BankOperationService bankOperationService;
 
     @GetMapping("/accounts")
-    public ResponseEntity<List<AccountDTO>> getAllOperations() {
+    public ResponseEntity<List<AccountDTO>> getAllAccounts() {
         return ResponseEntity.ok(bankOperationService.getAllAccounts());
     }
 
@@ -27,9 +27,8 @@ public class BankOperationController {
         return ResponseEntity.ok(bankOperationService.getAllOperations());
     }
 
-    @PostMapping("/create-operation")
+    @PostMapping("/operations")
     public ResponseEntity<BankOperationResponse> createBankOperation(@RequestBody BankOperationRequest bankOperationRequest) {
-        BankOperationResponse response = bankOperationService.createOperation(bankOperationRequest);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(bankOperationService.createOperation(bankOperationRequest));
     }
 }
