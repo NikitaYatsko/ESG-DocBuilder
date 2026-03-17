@@ -18,3 +18,4 @@ create table esgschema.operation
     comment    varchar(255),
     created_at timestamp default current_timestamp
 );
+

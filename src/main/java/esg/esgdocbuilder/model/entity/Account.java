@@ -3,6 +3,8 @@ package esg.esgdocbuilder.model.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @Entity
 @Table(name = "account", schema = "esgschema")
@@ -13,5 +15,5 @@ public class Account {
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "balance", nullable = false)
-    private String balance;
+    private BigDecimal balance;
 }
