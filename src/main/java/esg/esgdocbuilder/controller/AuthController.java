@@ -3,6 +3,9 @@ package esg.esgdocbuilder.controller;
 import esg.esgdocbuilder.model.dto.request.LoginRequest;
 import esg.esgdocbuilder.model.dto.response.UserAuthResponse;
 import esg.esgdocbuilder.service.AuthService;
+import esg.esgdocbuilder.utils.ApiUtils;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +19,33 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<UserAuthResponse> login(
-            @Valid @RequestBody LoginRequest request
+            @Valid @RequestBody LoginRequest request,
+            HttpServletResponse response
     ) {
-        UserAuthResponse response = authService.login(request);
-        return ResponseEntity.ok(response);
 
+        UserAuthResponse auth = authService.login(request);
+
+        Cookie refreshCookie = ApiUtils.createCookie(auth.getRefreshToken());
+        response.addCookie(refreshCookie);
+
+        return ResponseEntity.ok(auth);
     }
 
-    @GetMapping("/refresh/token")
-    public ResponseEntity<UserAuthResponse> refreshToken(@RequestParam String refreshToken) {
-        UserAuthResponse response = authService.refreshAccessToken(refreshToken);
-        return ResponseEntity.ok(response);
+    @PostMapping("/refresh")
+    public ResponseEntity<UserAuthResponse> refreshToken(
+            @CookieValue(value = "refreshToken", required = false) String refreshToken,
+            HttpServletResponse response
+    ) {
+        if (refreshToken == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        UserAuthResponse auth = authService.refreshAccessToken(refreshToken);
+
+        Cookie authCookie = ApiUtils.createCookie(auth.getRefreshToken());
+        response.addCookie(authCookie);
+
+        return ResponseEntity.ok(auth);
     }
 
 }
