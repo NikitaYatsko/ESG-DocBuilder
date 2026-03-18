@@ -19,7 +19,7 @@ public class InvoiceItemMapper {
         response.setProductId(item.getProduct().getId());
         response.setQuantity(item.getQuantity());
         response.setUnitPrice(item.getUnitPrice());
-        response.setVat(item.getVat());
+        response.setVatMultiplier(item.getVatMultiplier());
         response.setTotalPrice(item.getTotalPrice());
         return response;
     }
@@ -31,8 +31,8 @@ public class InvoiceItemMapper {
         item.setProduct(product);
         item.setQuantity(request.getQuantity());
         item.setUnitPrice(request.getUnitPrice());
-        item.setVat(request.getVat());
-
+        item.setVatMultiplier(request.getVatMultiplier());
+        item.setTotalPrice(request.getTotalPrice());
         return item;
     }
 }

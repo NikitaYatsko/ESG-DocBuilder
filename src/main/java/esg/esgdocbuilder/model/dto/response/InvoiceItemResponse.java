@@ -12,6 +12,6 @@ public class InvoiceItemResponse {
     private Long productId;
     private BigDecimal quantity;
     private BigDecimal unitPrice;
-    private BigDecimal vat;
+    private BigDecimal vatMultiplier;
     private BigDecimal totalPrice;
 }

@@ -18,6 +18,12 @@ import java.util.List;
 public class InvoiceItemController {
     private final InvoiceItemService itemService;
 
+
+    @GetMapping("/{itemId}")
+    public ResponseEntity<InvoiceItemResponse> getItemById(@PathVariable Long itemId) {
+        return ResponseEntity.ok(itemService.getItemById(itemId));
+    }
+
     @PostMapping
     public ResponseEntity<InvoiceItemResponse> addItem(@PathVariable Long invoiceId,
                                                        @Valid @RequestBody InvoiceItemRequest request) {

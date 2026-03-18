@@ -30,6 +30,6 @@ public class InvoiceItem {
     @Column(name = "total_price", nullable = false)
     private BigDecimal totalPrice;
 
-    @Column(name = "vat")
-    private BigDecimal vat;
+    @Column(name = "vat_multiplier", nullable = false)
+    private BigDecimal vatMultiplier;
 }

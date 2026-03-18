@@ -2,29 +2,19 @@ package esg.esgdocbuilder.service.impl;
 
 import esg.esgdocbuilder.constants.ApiErrorMessage;
 import esg.esgdocbuilder.exception.exceptions.InvoiceNotFoundException;
-import esg.esgdocbuilder.exception.exceptions.ProductNotFoundException;
-import esg.esgdocbuilder.mapper.InvoiceItemMapper;
 import esg.esgdocbuilder.mapper.InvoiceMapper;
 import esg.esgdocbuilder.model.dto.request.InvoiceItemRequest;
 import esg.esgdocbuilder.model.dto.request.InvoiceRequest;
 import esg.esgdocbuilder.model.dto.response.InvoiceResponse;
 import esg.esgdocbuilder.model.entity.Invoice;
-import esg.esgdocbuilder.model.entity.InvoiceItem;
-import esg.esgdocbuilder.model.entity.Product;
-import esg.esgdocbuilder.repository.InvoiceItemRepository;
 import esg.esgdocbuilder.repository.InvoiceRepository;
-import esg.esgdocbuilder.repository.ProductRepository;
 import esg.esgdocbuilder.service.InvoiceItemService;
 import esg.esgdocbuilder.service.InvoiceService;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -46,8 +36,6 @@ public class InvoiceServiceImpl implements InvoiceService {
     public InvoiceResponse createInvoice(InvoiceRequest invoiceRequest){
         Invoice invoice = new Invoice();
         invoice.setInvoiceNumber(generateInvoiceNumber());
-        invoice.setCreatedAt(LocalDateTime.now());
-        invoice.setUpdatedAt(LocalDateTime.now());
 
         Invoice savedInvoice = invoiceRepository.save(invoice);
 
@@ -80,12 +68,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     public InvoiceResponse updateInvoice(Long id,InvoiceRequest invoiceRequest){
         Invoice invoice = invoiceRepository.findById(id)
-                .orElseThrow(() -> new InvoiceNotFoundException(
-                        ApiErrorMessage.INVOICE_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new InvoiceNotFoundException(ApiErrorMessage.INVOICE_NOT_FOUND.getMessage()));
 
-        itemService.getItemsByInvoiceId(id).forEach(item ->
-                itemService.deleteItem(item.getId())
-        );
+        itemService.deleteByInvoiceId(id);
+
+        invoice.getInvoiceItems().clear();
 
         for (InvoiceItemRequest itemRequest : invoiceRequest.getItems()) {
             itemService.addItemToInvoice(id, itemRequest);

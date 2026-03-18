@@ -46,7 +46,7 @@ CREATE TABLE esgschema.invoice_item
     invoice_id  BIGINT         NOT NULL REFERENCES invoice (id) ON DELETE CASCADE,
     product_id  BIGINT         NOT NULL REFERENCES products (id),
     quantity    NUMERIC(10, 2) NOT NULL CHECK (quantity > 0),
-    vat          numeric                 default 0,
+    vat_multiplier          numeric                 default 0,
     unit_price  NUMERIC(10, 2) NOT NULL CHECK (unit_price >= 0),
     total_price NUMERIC(12, 2) NOT NULL CHECK (total_price >= 0)
 );

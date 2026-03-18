@@ -14,8 +14,6 @@ import esg.esgdocbuilder.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,47 +40,48 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new CategoryNotFoundException(
                         ApiErrorMessage.CATEGORY_NOT_FOUND.getMessage()));
 
-        // 1. Базовое создание сущности через маппер
+
         Product product = productMapper.toEntity(request, category);
 
-        // 2. Расчёт sellPrice и marginality на основе costPrice и markupPercent
-        BigDecimal costPrice = request.getCostPrice();
-        BigDecimal markupPercent = request.getMarkupPercent() != null ? request.getMarkupPercent() : BigDecimal.ZERO;
 
-        // sellPrice = costPrice + (costPrice * markupPercent / 100)
-        BigDecimal sellPrice = costPrice.add(
-                costPrice.multiply(markupPercent)
-                        .divide(new BigDecimal(100), 2, RoundingMode.HALF_UP)
-        );
-        product.setSellPrice(sellPrice);
-
-        // marginality = ((sellPrice - costPrice) / sellPrice) * 100
-        if (sellPrice.compareTo(BigDecimal.ZERO) > 0) {
-            BigDecimal marginality = sellPrice.subtract(costPrice)
-                    .divide(sellPrice, 4, RoundingMode.HALF_UP)
-                    .multiply(new BigDecimal(100))
-                    .setScale(2, RoundingMode.HALF_UP);
-            product.setMarginality(marginality);
-        } else {
-            product.setMarginality(BigDecimal.ZERO);
-        }
-
-        // 3. Установка НДС (ставка в процентах, например 20%)
-        if (request.getHasVat() != null && request.getHasVat()) {
-            // Здесь можно либо брать ставку из конфигурации, либо фиксированно 20%
-            product.setVat(new BigDecimal("20")); // или другая логика
-        } else {
-            product.setVat(BigDecimal.ZERO);
-        }
-
-        // 4. Сохранение
         Product savedProduct = productRepository.save(product);
         return productMapper.toResponse(savedProduct);
+    }
+
+    @Override
+    public ProductResponse updateProduct(NewProductRequest request, Long id){
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(
+                        ApiErrorMessage.PRODUCT_NOT_FOUND.getMessage()));
+
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new CategoryNotFoundException(
+                        ApiErrorMessage.CATEGORY_NOT_FOUND.getMessage()));
+
+
+        product.setName(request.getName());
+        product.setTypeOfUnit(request.getTypeOfUnit());
+        product.setCategory(category);
+        product.setCostPrice(request.getCostPrice());
+        product.setSellPrice(request.getSellPrice());
+        product.setMarginality(request.getMarginality());
+        product.setVat(request.getVat());
+
+        Product updatedProduct = productRepository.save(product);
+        return productMapper.toResponse(updatedProduct);
     }
 
     @Override
     public List<ProductResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
         return products.stream().map(productMapper::toResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFoundException(ApiErrorMessage.PRODUCT_NOT_FOUND.getMessage());
+        }
+        productRepository.deleteById(id);
     }
 }
