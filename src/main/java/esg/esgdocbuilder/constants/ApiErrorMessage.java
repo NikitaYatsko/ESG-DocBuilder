@@ -17,6 +17,7 @@ public enum ApiErrorMessage {
     REFRESH_TOKEN_NOT_FOUND("Refresh token not found"),
     INVOICE_NOT_FOUND("Invoice not found"),
     INVOICE_ITEM_NOT_FOUND("Invoice item not found"),
+    ACCOUNT_NOT_FOUND("Account not found"),
     ;
 
 
