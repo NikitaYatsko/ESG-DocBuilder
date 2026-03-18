@@ -36,6 +36,7 @@ public class Product {
 
     @Column(name = "vat")
     private BigDecimal vat;
+
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;

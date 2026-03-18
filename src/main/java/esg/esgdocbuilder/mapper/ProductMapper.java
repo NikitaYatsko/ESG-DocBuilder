@@ -6,6 +6,8 @@ import esg.esgdocbuilder.model.entity.Category;
 import esg.esgdocbuilder.model.entity.Product;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class ProductMapper {
 
@@ -35,6 +37,9 @@ public class ProductMapper {
         product.setTypeOfUnit(newProductRequest.getTypeOfUnit());
         product.setCategory(category);
         product.setCostPrice(newProductRequest.getCostPrice());
+        product.setSellPrice(newProductRequest.getSellPrice());
+        product.setMarginality(newProductRequest.getMarginality());
+        product.setVat(newProductRequest.getVat());
         return product;
 
     }

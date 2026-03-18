@@ -1,6 +1,7 @@
 package esg.esgdocbuilder.service.impl;
 
 import esg.esgdocbuilder.constants.ApiErrorMessage;
+import esg.esgdocbuilder.exception.exceptions.CategoryNotFoundException;
 import esg.esgdocbuilder.exception.exceptions.ProductNotFoundException;
 import esg.esgdocbuilder.mapper.ProductMapper;
 import esg.esgdocbuilder.model.dto.request.NewProductRequest;
@@ -33,21 +34,54 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toResponse(product);
     }
 
+    @Override
     public ProductResponse createProduct(NewProductRequest request) {
-
         Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new ProductNotFoundException(ApiErrorMessage.CATEGORY_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new CategoryNotFoundException(
+                        ApiErrorMessage.CATEGORY_NOT_FOUND.getMessage()));
+
 
         Product product = productMapper.toEntity(request, category);
 
-        Product savedProduct = productRepository.save(product);
 
+        Product savedProduct = productRepository.save(product);
         return productMapper.toResponse(savedProduct);
+    }
+
+    @Override
+    public ProductResponse updateProduct(NewProductRequest request, Long id){
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(
+                        ApiErrorMessage.PRODUCT_NOT_FOUND.getMessage()));
+
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new CategoryNotFoundException(
+                        ApiErrorMessage.CATEGORY_NOT_FOUND.getMessage()));
+
+
+        product.setName(request.getName());
+        product.setTypeOfUnit(request.getTypeOfUnit());
+        product.setCategory(category);
+        product.setCostPrice(request.getCostPrice());
+        product.setSellPrice(request.getSellPrice());
+        product.setMarginality(request.getMarginality());
+        product.setVat(request.getVat());
+
+        Product updatedProduct = productRepository.save(product);
+        return productMapper.toResponse(updatedProduct);
     }
 
     @Override
     public List<ProductResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
         return products.stream().map(productMapper::toResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFoundException(ApiErrorMessage.PRODUCT_NOT_FOUND.getMessage());
+        }
+        productRepository.deleteById(id);
     }
 }

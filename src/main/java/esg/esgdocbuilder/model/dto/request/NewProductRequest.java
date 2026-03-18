@@ -14,7 +14,8 @@ public class NewProductRequest {
     private TypeOfUnitEnum typeOfUnit; // Единица измерения
 
     // Финансовые данные
-    private BigDecimal costPrice;      // Себестоимость
-    private BigDecimal markupPercent;  // Наценка в %
-    private Boolean hasVat;            // Есть ли НДС
+    private BigDecimal costPrice;
+    private BigDecimal sellPrice;
+    private BigDecimal marginality;
+    private BigDecimal vat;
 }
