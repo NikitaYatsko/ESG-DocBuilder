@@ -7,6 +7,7 @@ import esg.esgdocbuilder.model.entity.User;
 import esg.esgdocbuilder.repository.RefreshTokenRepository;
 import esg.esgdocbuilder.service.RefreshTokenService;
 import esg.esgdocbuilder.utils.ApiUtils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,13 +34,20 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         });
     }
 
+
     @Override
     public RefreshToken validateAndRefreshToken(String rToken) {
-        RefreshToken refreshToken = refreshTokenRepository.findByToken(rToken).orElseThrow(
-                () -> new RefreshTokenNotFoundException(ApiErrorMessage.REFRESH_TOKEN_NOT_FOUND.getMessage())
+        return refreshTokenRepository.findByToken(rToken).orElseThrow(
+                () -> new RefreshTokenNotFoundException(
+                        ApiErrorMessage.REFRESH_TOKEN_NOT_FOUND.getMessage()
+                )
         );
-        refreshToken.setCreated(LocalDateTime.now());
-        refreshToken.setToken(ApiUtils.generateUuidWithoutDash());
-        return refreshTokenRepository.save(refreshToken);
+    }
+
+    @Transactional
+    @Override
+    public void deleteRefreshToken(String rToken) {
+        RefreshToken refreshToken = validateAndRefreshToken(rToken);
+        refreshTokenRepository.delete(refreshToken);
     }
 }
