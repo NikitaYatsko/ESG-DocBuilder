@@ -14,7 +14,7 @@ public class ApiUtils {
         Cookie refreshCookie = new Cookie("refreshToken", value);
         refreshCookie.setHttpOnly(true);
         refreshCookie.setSecure(false);
-        refreshCookie.setPath("/auth/refresh");
+        refreshCookie.setPath("/");
         refreshCookie.setMaxAge(7 * 24 * 60 * 60);
         return refreshCookie;
     }
