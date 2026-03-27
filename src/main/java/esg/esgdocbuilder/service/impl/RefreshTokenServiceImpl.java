@@ -34,7 +34,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         });
     }
 
-
     @Override
     public RefreshToken validateAndRefreshToken(String rToken) {
         return refreshTokenRepository.findByToken(rToken).orElseThrow(
