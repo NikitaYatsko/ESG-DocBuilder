@@ -31,8 +31,8 @@ public class AuthController {
 
         UserAuthResponse auth = authService.login(request);
 
-        Cookie refreshCookie = ApiUtils.createCookie(auth.getRefreshToken());
-        response.addCookie(refreshCookie);
+        ResponseCookie refreshCookie = ApiUtils.createRefreshTokenCookie(auth.getRefreshToken());
+        response.addHeader("Set-Cookie", refreshCookie.toString());
 
         return ResponseEntity.ok(auth);
     }
