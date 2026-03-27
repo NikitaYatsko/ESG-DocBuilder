@@ -2,6 +2,7 @@ package esg.esgdocbuilder.utils;
 
 
 import jakarta.servlet.http.Cookie;
+import org.springframework.http.ResponseCookie;
 
 import java.util.UUID;
 
@@ -10,12 +11,13 @@ public class ApiUtils {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
-    public static Cookie createCookie(String value) {
-        Cookie refreshCookie = new Cookie("refreshToken", value);
-        refreshCookie.setHttpOnly(true);
-        refreshCookie.setSecure(false);
-        refreshCookie.setPath("/auth/refresh");
-        refreshCookie.setMaxAge(7 * 24 * 60 * 60);
-        return refreshCookie;
+    public static ResponseCookie createRefreshTokenCookie(String value) {
+        return ResponseCookie.from("refreshToken", value)
+                .httpOnly(true)
+                .secure(true) // Важно для SameSite=None
+                .path("/")
+                .maxAge(7 * 24 * 60 * 60)
+                .sameSite("None") // Критически важно!
+                .build();
     }
 }
