@@ -23,6 +23,12 @@ public class ProductController {
         return ResponseEntity.ok(allProducts);
     }
 
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<ProductResponse>> getProductsByCategory(@PathVariable Long categoryId) {
+
+        return ResponseEntity.ok(productService.getProductsByCategory(categoryId));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);

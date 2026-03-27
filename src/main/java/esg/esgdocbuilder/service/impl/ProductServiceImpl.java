@@ -35,6 +35,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductResponse> getProductsByCategory(Long categoryId){
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new CategoryNotFoundException(
+                    ApiErrorMessage.CATEGORY_NOT_FOUND.getMessage()
+            );
+        }
+        List<Product> products = productRepository.findByCategoryId(categoryId);
+        return products.stream()
+                .map(productMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
     public ProductResponse createProduct(NewProductRequest request) {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException(
