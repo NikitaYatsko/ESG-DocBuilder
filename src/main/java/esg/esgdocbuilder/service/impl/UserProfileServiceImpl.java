@@ -1,6 +1,6 @@
 package esg.esgdocbuilder.service.impl;
 
-import com.cloudinary.Api;
+
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import esg.esgdocbuilder.constants.ApiErrorMessage;
@@ -12,10 +12,7 @@ import esg.esgdocbuilder.model.entity.User;
 import esg.esgdocbuilder.repository.UserRepository;
 import esg.esgdocbuilder.service.UserProfileService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

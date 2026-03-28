@@ -1,6 +1,7 @@
 package esg.esgdocbuilder.exception;
 
 import esg.esgdocbuilder.exception.exceptions.*;
+import esg.esgdocbuilder.model.entity.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -42,6 +43,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleUserAlreadyExists(UserAlreadyExistsException ex) {
+
+        ErrorResponse error = new ErrorResponse(
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(InvoiceItemNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleInvoiceItemNotFound(InvoiceItemNotFoundException ex) {
         ErrorResponse error = new ErrorResponse(
@@ -52,8 +65,30 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(RoleNotFoundExecption.class)
+    public ResponseEntity<ErrorResponse> RoleNotFound(RoleNotFoundExecption ex) {
+        ErrorResponse error = new ErrorResponse(
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(UserDoesNotExistsException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFound(UserDoesNotExistsException ex) {
+
+        ErrorResponse error = new ErrorResponse(
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(PasswordDoNotMatchException.class)
+    public ResponseEntity<ErrorResponse> PasswordDoNotMatchException(PasswordDoNotMatchException ex) {
 
         ErrorResponse error = new ErrorResponse(
                 ex.getMessage(),
