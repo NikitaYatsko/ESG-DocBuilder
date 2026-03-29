@@ -1,7 +1,6 @@
 package esg.esgdocbuilder.exception;
 
 import esg.esgdocbuilder.exception.exceptions.*;
-import esg.esgdocbuilder.model.entity.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,133 +10,50 @@ import java.time.LocalDateTime;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
     public record ErrorResponse(
             String message,
             int status,
             LocalDateTime timestamp
-    ) {
-    }
+    ) {}
 
-    @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleProductNotFound(ProductNotFoundException ex) {
-
+    private ResponseEntity<ErrorResponse> buildResponse(String message, HttpStatus status) {
         ErrorResponse error = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.NOT_FOUND.value(),
+                message,
+                status.value(),
                 LocalDateTime.now()
         );
-
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(error, status);
     }
 
-    @ExceptionHandler(CategoryNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleCategoryNotFound(CategoryNotFoundException ex) {
+    @ExceptionHandler({
+            ProductNotFoundException.class,
+            CategoryNotFoundException.class,
+            InvoiceItemNotFoundException.class,
+            RoleNotFoundExecption.class,
+            UserDoesNotExistsException.class,
+            InvoiceNotFoundException.class,
+            RefreshTokenNotFoundException.class,
+            AccountNotFoundException.class
+    })
+    public ResponseEntity<ErrorResponse> handleNotFound(RuntimeException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
 
-        ErrorResponse error = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.NOT_FOUND.value(),
-                LocalDateTime.now()
+    @ExceptionHandler({
+            UserAlreadyExistsException.class,
+            PasswordDoNotMatchException.class,
+            FileIsEmptyException.class
+    })
+    public ResponseEntity<ErrorResponse> handleBadRequest(RuntimeException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGlobal(Exception ex) {
+        return buildResponse(
+                "Internal server error: " + ex.getMessage(),
+                HttpStatus.INTERNAL_SERVER_ERROR
         );
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponse> handleUserAlreadyExists(UserAlreadyExistsException ex) {
-
-        ErrorResponse error = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.NOT_FOUND.value(),
-                LocalDateTime.now()
-        );
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(InvoiceItemNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleInvoiceItemNotFound(InvoiceItemNotFoundException ex) {
-        ErrorResponse error = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.NOT_FOUND.value(),
-                LocalDateTime.now()
-        );
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(RoleNotFoundExecption.class)
-    public ResponseEntity<ErrorResponse> RoleNotFound(RoleNotFoundExecption ex) {
-        ErrorResponse error = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.NOT_FOUND.value(),
-                LocalDateTime.now()
-        );
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(UserDoesNotExistsException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFound(UserDoesNotExistsException ex) {
-
-        ErrorResponse error = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.NOT_FOUND.value(),
-                LocalDateTime.now()
-        );
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(PasswordDoNotMatchException.class)
-    public ResponseEntity<ErrorResponse> PasswordDoNotMatchException(PasswordDoNotMatchException ex) {
-
-        ErrorResponse error = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.NOT_FOUND.value(),
-                LocalDateTime.now()
-        );
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(FileIsEmptyException.class)
-    public ResponseEntity<ErrorResponse> handleFileIsEmpty(FileIsEmptyException ex) {
-
-        ErrorResponse error = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.NOT_FOUND.value(),
-                LocalDateTime.now()
-        );
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(InvoiceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleInvoiceNotFound(InvoiceNotFoundException ex) {
-        ErrorResponse error = new ErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDateTime.now());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(RefreshTokenNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleRefreshTokenNotFound(RefreshTokenNotFoundException ex) {
-
-        ErrorResponse error = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.NOT_FOUND.value(),
-                LocalDateTime.now()
-        );
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(AccountNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleAccountNotFound(AccountNotFoundException ex) {
-
-        ErrorResponse error = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.NOT_FOUND.value(),
-                LocalDateTime.now()
-        );
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 }
