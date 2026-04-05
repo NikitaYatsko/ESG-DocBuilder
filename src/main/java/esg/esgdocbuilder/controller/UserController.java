@@ -5,6 +5,7 @@ import esg.esgdocbuilder.model.dto.response.UserProfileResponse;
 import esg.esgdocbuilder.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,4 +28,9 @@ public class UserController {
         return ResponseEntity.ok(userService.findAll());
     }
 
+    @DeleteMapping("/{email}")
+    public ResponseEntity<UserProfileResponse> deleteUser(@PathVariable String email) {
+        userService.deleteUser(email);
+        return ResponseEntity.noContent().build();
+    }
 }

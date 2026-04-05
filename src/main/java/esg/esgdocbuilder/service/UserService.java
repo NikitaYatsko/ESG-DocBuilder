@@ -8,4 +8,5 @@ import java.util.List;
 public interface UserService {
     UserProfileResponse createNewUser(UserRegistrationRequest userRegistrationRequest);
     List<UserProfileResponse> findAll();
+    void deleteUser(String email);
 }

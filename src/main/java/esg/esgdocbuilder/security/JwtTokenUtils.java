@@ -40,6 +40,7 @@ public class JwtTokenUtils {
     public String getUsernameFromToken(String token) {
         return getAllClaims(token).getSubject();
     }
+
     public List<String> getRolesFromToken(String token) {
         return getAllClaims(token).get("roles", List.class);
     }

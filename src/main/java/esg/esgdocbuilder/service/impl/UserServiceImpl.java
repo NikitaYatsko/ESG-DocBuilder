@@ -4,6 +4,7 @@ import esg.esgdocbuilder.constants.ApiErrorMessage;
 import esg.esgdocbuilder.exception.exceptions.PasswordDoNotMatchException;
 import esg.esgdocbuilder.exception.exceptions.RoleNotFoundExecption;
 import esg.esgdocbuilder.exception.exceptions.UserAlreadyExistsException;
+import esg.esgdocbuilder.exception.exceptions.UserDoesNotExistsException;
 import esg.esgdocbuilder.mapper.UserMapper;
 import esg.esgdocbuilder.model.dto.request.UserRegistrationRequest;
 import esg.esgdocbuilder.model.dto.response.UserProfileResponse;
@@ -23,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -62,9 +64,19 @@ public class UserServiceImpl implements UserService {
 
     }
 
+
     @Override
     public List<UserProfileResponse> findAll() {
         return userRepository.findAll().stream().map(userMapper::getUserProfile).collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteUser(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new UserDoesNotExistsException(ApiErrorMessage.USER_DOES_NOT_EXIST.getMessage()));
+
+        userRepository.delete(user);
+
     }
 
 }

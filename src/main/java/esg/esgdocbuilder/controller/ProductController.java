@@ -19,7 +19,6 @@ public class ProductController {
 
     private final ProductService productService;
 
-
     @GetMapping
     public ResponseEntity<PaginationResponse<ProductResponse>> getAllProducts(
             @RequestParam(defaultValue = "0") int page,

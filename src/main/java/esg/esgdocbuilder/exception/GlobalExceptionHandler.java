@@ -15,7 +15,8 @@ public class GlobalExceptionHandler {
             String message,
             int status,
             LocalDateTime timestamp
-    ) {}
+    ) {
+    }
 
     private ResponseEntity<ErrorResponse> buildResponse(String message, HttpStatus status) {
         ErrorResponse error = new ErrorResponse(
@@ -25,6 +26,7 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(error, status);
     }
+
 
     @ExceptionHandler({
             ProductNotFoundException.class,
