@@ -18,6 +18,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+
 
 @Service
 @RequiredArgsConstructor
@@ -88,6 +91,11 @@ public class ProductServiceImpl implements ProductService {
                         dtos.getTotalPages()
                 )
         );
+    }
+
+    @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
     }
 
     @Override
