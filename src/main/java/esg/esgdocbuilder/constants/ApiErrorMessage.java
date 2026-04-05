@@ -18,6 +18,9 @@ public enum ApiErrorMessage {
     INVOICE_NOT_FOUND("Invoice not found"),
     INVOICE_ITEM_NOT_FOUND("Invoice item not found"),
     ACCOUNT_NOT_FOUND("Account not found"),
+    USER_ALREADY_EXISTS("User already exist"),
+    PASSWORD_DOES_NOT_MATCH("Password doesn't match"),
+    ROLE_NOT_FOUND("Role not found"),
     ;
 
 
