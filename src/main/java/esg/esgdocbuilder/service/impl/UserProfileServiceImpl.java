@@ -7,6 +7,7 @@ import esg.esgdocbuilder.constants.ApiErrorMessage;
 import esg.esgdocbuilder.exception.exceptions.FileIsEmptyException;
 import esg.esgdocbuilder.exception.exceptions.UserDoesNotExistsException;
 import esg.esgdocbuilder.mapper.UserMapper;
+import esg.esgdocbuilder.model.dto.request.UpdateUserData;
 import esg.esgdocbuilder.model.dto.response.UserProfileResponse;
 import esg.esgdocbuilder.model.entity.User;
 import esg.esgdocbuilder.repository.UserRepository;
@@ -51,6 +52,25 @@ public class UserProfileServiceImpl implements UserProfileService {
         } catch (IOException e) {
             throw new RuntimeException("Failed to upload photo", e);
         }
+    }
+
+    @Override
+    public UserProfileResponse updateUserProfile(UpdateUserData updateUserData) {
+        User user = getCurrentUser();
+
+        if (updateUserData.getFirstName() != null) {
+            user.setFirstName(updateUserData.getFirstName());
+        }
+        if (updateUserData.getLastName() != null) {
+            user.setLastName(updateUserData.getLastName());
+        }
+        if (updateUserData.getPhone() != null) {
+            user.setPhone(updateUserData.getPhone());
+        }
+
+        userRepository.save(user);
+
+        return userMapper.getUserProfile(user);
     }
 
     private User getCurrentUser() {

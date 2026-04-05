@@ -1,5 +1,6 @@
 package esg.esgdocbuilder.controller;
 
+import esg.esgdocbuilder.model.dto.request.UpdateUserData;
 import esg.esgdocbuilder.model.dto.response.UserProfileResponse;
 import esg.esgdocbuilder.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,11 @@ public class UserProfileController {
     @PostMapping("/avatar")
     public ResponseEntity<UserProfileResponse> updateUserProfile(@RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(userProfileService.uploadUserPhoto(file));
+    }
+
+    @PutMapping("/data")
+    public ResponseEntity<UserProfileResponse> updateUserData(@RequestBody UpdateUserData request) {
+        return ResponseEntity.ok(userProfileService.updateUserProfile(request));
     }
 
 }
