@@ -116,13 +116,14 @@ public class PdfServiceImpl implements PdfService {
                     .setPaddingBottom(4)
                     .setTextAlignment(TextAlignment.LEFT);
 
-            infoCell.add(new Paragraph("Номер сметы: " + invoice.getInvoiceNumber())
-                    .setFont(font).setFontSize(fontSize).setMargin(0));
+
             infoCell.add(new Paragraph("Дата: " + dateStr)
                     .setFont(font).setFontSize(fontSize).setMargin(0));
             infoCell.add(new Paragraph(" ")
                     .setFontSize(2).setMargin(0));
-            infoCell.add(new Paragraph("Телефон: +373 60 113 867")
+            infoCell.add(new Paragraph("Телефон: 067252000")
+                    .setFont(font).setFontSize(fontSize).setMargin(0));
+            infoCell.add(new Paragraph("Телефон: 067600640")
                     .setFont(font).setFontSize(fontSize).setMargin(0));
             infoCell.add(new Paragraph("Емаил: info@solution.md")
                     .setFont(font).setFontSize(fontSize).setMargin(0));
@@ -141,14 +142,14 @@ public class PdfServiceImpl implements PdfService {
 
             Paragraph powerKwt = new Paragraph("Мощность станции " + invoice.getPower() + " kWt")
                     .setFont(font)
-                    .setFontSize(16)
+                    .setFontSize(12)
                     .setTextAlignment(TextAlignment.CENTER)
                     .setMarginBottom(5);
             document.add(powerKwt);
 
 
             // Заголовок документа
-            Paragraph title = new Paragraph("Коммерческое предложение")
+            Paragraph title = new Paragraph("Смета")
                     .setFont(font)
                     .setFontSize(16)
                     .setTextAlignment(TextAlignment.CENTER)
@@ -211,7 +212,7 @@ public class PdfServiceImpl implements PdfService {
             document.add(totalTable);
 
             document.close();
-            log.info("PDF для сметы {} успешно сгенерирован", invoice.getInvoiceNumber());
+            log.info("PDF для сметы {} успешно сгенерирован", invoice.getInvoiceName());
 
         } catch (Exception e) {
             log.error("Ошибка генерации PDF для сметы с ID {}", invoiceId, e);
@@ -226,7 +227,7 @@ public class PdfServiceImpl implements PdfService {
         Table table = new Table(UnitValue.createPointArray(columnWidths));
         table.setWidth(UnitValue.createPercentValue(100));
 
-        String[] headers = {"Наименование", "Кол-во", "Цена", "НДС", "Сумма"};
+        String[] headers = {"Наименование", "Кол-во", "Цена", "НДС", "Итого MDL"};
         for (String header : headers) {
             Cell cell = new Cell()
                     .add(new Paragraph(header).setFont(font).setFontSize(9))

@@ -35,7 +35,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public InvoiceResponse createInvoice(InvoiceRequest invoiceRequest){
         Invoice invoice = new Invoice();
-        invoice.setInvoiceNumber(generateInvoiceNumber());
+        invoice.setInvoiceName(invoiceRequest.getInvoiceName());
         invoice.setPowerKwt(invoiceRequest.getPower());
 
         Invoice savedInvoice = invoiceRepository.save(invoice);
@@ -49,9 +49,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
 
-    private String generateInvoiceNumber() {
-        return "INV-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-    }
+
 
     @Override
     public InvoiceResponse getInvoiceById(Long id){
@@ -71,6 +69,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         Invoice invoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new InvoiceNotFoundException(ApiErrorMessage.INVOICE_NOT_FOUND.getMessage()));
 
+        invoice.setInvoiceName(invoiceRequest.getInvoiceName());
         invoice.setPowerKwt(invoiceRequest.getPower());
 
         itemService.deleteByInvoiceId(id);

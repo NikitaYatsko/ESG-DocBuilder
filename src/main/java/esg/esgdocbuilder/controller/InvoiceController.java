@@ -32,7 +32,7 @@ public class InvoiceController {
 
         // Получаем номер сметы для имени файла
         InvoiceResponse invoice = invoiceService.getInvoiceById(id);
-        String filename = "smeta_" + invoice.getInvoiceNumber() + ".pdf";
+        String filename = "smeta_" + invoice.getInvoiceName() + ".pdf";
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")

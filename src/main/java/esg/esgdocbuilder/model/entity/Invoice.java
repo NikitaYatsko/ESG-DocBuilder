@@ -18,8 +18,8 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "invoice_number",nullable = false)
-    private String invoiceNumber;
+    @Column(name = "invoice_name",nullable = false)
+    private String invoiceName;
 
     @Column(name = "power_kwt")
     private BigDecimal powerKwt;

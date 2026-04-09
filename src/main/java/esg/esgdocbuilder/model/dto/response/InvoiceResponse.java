@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class InvoiceResponse {
     private Long id;
-    private String invoiceNumber;
+    private String invoiceName;
     private BigDecimal power;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
