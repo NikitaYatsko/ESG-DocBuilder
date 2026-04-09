@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,9 @@ public class Invoice {
 
     @Column(name = "invoice_number",nullable = false)
     private String invoiceNumber;
+
+    @Column(name = "power_kwt")
+    private BigDecimal powerKwt;
 
     @CreationTimestamp
     @Column(name = "created_at",nullable = false)

@@ -36,6 +36,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     public InvoiceResponse createInvoice(InvoiceRequest invoiceRequest){
         Invoice invoice = new Invoice();
         invoice.setInvoiceNumber(generateInvoiceNumber());
+        invoice.setPowerKwt(invoiceRequest.getPower());
 
         Invoice savedInvoice = invoiceRepository.save(invoice);
 
@@ -69,6 +70,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     public InvoiceResponse updateInvoice(Long id,InvoiceRequest invoiceRequest){
         Invoice invoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new InvoiceNotFoundException(ApiErrorMessage.INVOICE_NOT_FOUND.getMessage()));
+
+        invoice.setPowerKwt(invoiceRequest.getPower());
 
         itemService.deleteByInvoiceId(id);
 

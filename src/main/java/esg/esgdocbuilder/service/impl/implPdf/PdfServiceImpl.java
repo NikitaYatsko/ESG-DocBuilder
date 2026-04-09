@@ -139,12 +139,20 @@ public class PdfServiceImpl implements PdfService {
 
             document.add(headerTable);
 
+            Paragraph powerKwt = new Paragraph("Мощность станции " + invoice.getPower() + " kWt")
+                    .setFont(font)
+                    .setFontSize(16)
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setMarginBottom(5);
+            document.add(powerKwt);
+
+
             // Заголовок документа
             Paragraph title = new Paragraph("Коммерческое предложение")
                     .setFont(font)
                     .setFontSize(16)
                     .setTextAlignment(TextAlignment.CENTER)
-                    .setMarginBottom(5);
+                    .setMarginBottom(1);
             document.add(title);
 
             // Таблица позиций

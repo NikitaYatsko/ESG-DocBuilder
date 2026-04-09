@@ -10,6 +10,7 @@ import java.util.List;
 public class InvoiceResponse {
     private Long id;
     private String invoiceNumber;
+    private BigDecimal power;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<InvoiceItemResponse> items;

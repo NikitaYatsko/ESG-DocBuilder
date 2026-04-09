@@ -25,6 +25,7 @@ public class InvoiceMapper {
         InvoiceResponse response = new InvoiceResponse();
         response.setId(invoice.getId());
         response.setInvoiceNumber(invoice.getInvoiceNumber());
+        response.setPower(invoice.getPowerKwt());
         response.setCreatedAt(invoice.getCreatedAt());
         response.setUpdatedAt(invoice.getUpdatedAt());
 
