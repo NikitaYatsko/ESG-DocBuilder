@@ -1,21 +1,19 @@
 package esg.esgdocbuilder.service.impl;
 
-import com.cloudinary.Api;
+
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import esg.esgdocbuilder.constants.ApiErrorMessage;
 import esg.esgdocbuilder.exception.exceptions.FileIsEmptyException;
 import esg.esgdocbuilder.exception.exceptions.UserDoesNotExistsException;
 import esg.esgdocbuilder.mapper.UserMapper;
+import esg.esgdocbuilder.model.dto.request.UpdateUserData;
 import esg.esgdocbuilder.model.dto.response.UserProfileResponse;
 import esg.esgdocbuilder.model.entity.User;
 import esg.esgdocbuilder.repository.UserRepository;
 import esg.esgdocbuilder.service.UserProfileService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -54,6 +52,25 @@ public class UserProfileServiceImpl implements UserProfileService {
         } catch (IOException e) {
             throw new RuntimeException("Failed to upload photo", e);
         }
+    }
+
+    @Override
+    public UserProfileResponse updateUserProfile(UpdateUserData updateUserData) {
+        User user = getCurrentUser();
+
+        if (updateUserData.getFirstName() != null) {
+            user.setFirstName(updateUserData.getFirstName());
+        }
+        if (updateUserData.getLastName() != null) {
+            user.setLastName(updateUserData.getLastName());
+        }
+        if (updateUserData.getPhone() != null) {
+            user.setPhone(updateUserData.getPhone());
+        }
+
+        userRepository.save(user);
+
+        return userMapper.getUserProfile(user);
     }
 
     private User getCurrentUser() {

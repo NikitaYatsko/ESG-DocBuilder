@@ -6,6 +6,7 @@ import esg.esgdocbuilder.mapper.BankOperationMapper;
 import esg.esgdocbuilder.model.dto.AccountDTO;
 import esg.esgdocbuilder.model.dto.request.BankOperationRequest;
 import esg.esgdocbuilder.model.dto.response.BankOperationResponse;
+import esg.esgdocbuilder.model.dto.response.PaginationResponse;
 import esg.esgdocbuilder.model.entity.Account;
 import esg.esgdocbuilder.model.entity.BankOperation;
 import esg.esgdocbuilder.model.enums.TypeOfOperationEnums;
@@ -13,6 +14,8 @@ import esg.esgdocbuilder.repository.AccountRepository;
 import esg.esgdocbuilder.repository.BankOperationRepository;
 import esg.esgdocbuilder.service.BankOperationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,9 +48,19 @@ public class BankOperationServiceImpl implements BankOperationService {
     }
 
     @Override
-    public List<BankOperationResponse> getAllOperations() {
-        List<BankOperation> bankOperations = bankOperationRepository.findAll();
-        return bankOperations.stream().map(bankOperationMapper::toResponse).toList();
+    public PaginationResponse<BankOperationResponse> getAllOperations(Pageable pageable) {
+        Page<BankOperation> bankOperations = bankOperationRepository.findAll(pageable);
+        Page<BankOperationResponse> dtos = bankOperations.map(bankOperationMapper::toResponse);
+        return new PaginationResponse<>(
+                dtos.getContent(),
+                new PaginationResponse.Pagination(
+                        dtos.getTotalElements(),
+                        pageable.getPageSize(),
+                        dtos.getNumber() + 1,
+                        dtos.getTotalPages()
+
+                )
+        );
     }
 
     @Override
