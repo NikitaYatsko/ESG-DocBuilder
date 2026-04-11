@@ -15,4 +15,7 @@ public class InvoiceResponse {
     private LocalDateTime updatedAt;
     private List<InvoiceItemResponse> items;
     private BigDecimal totalAmount;
+    private BigDecimal vat_amount;
+    private BigDecimal sumMarginality;
+    private BigDecimal sum;
 }

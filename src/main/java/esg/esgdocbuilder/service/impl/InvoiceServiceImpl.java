@@ -37,6 +37,9 @@ public class InvoiceServiceImpl implements InvoiceService {
         Invoice invoice = new Invoice();
         invoice.setInvoiceName(invoiceRequest.getInvoiceName());
         invoice.setPowerKwt(invoiceRequest.getPower());
+        invoice.setVatAmount(invoiceRequest.getVat_amount());
+        invoice.setSumAmount(invoiceRequest.getSum());
+        invoice.setSumMarginality(invoiceRequest.getSumMarginality());
 
         Invoice savedInvoice = invoiceRepository.save(invoice);
 
@@ -71,6 +74,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         invoice.setInvoiceName(invoiceRequest.getInvoiceName());
         invoice.setPowerKwt(invoiceRequest.getPower());
+        invoice.setVatAmount(invoiceRequest.getVat_amount());
+        invoice.setSumAmount(invoiceRequest.getSum());
+        invoice.setSumMarginality(invoiceRequest.getSumMarginality());
 
         itemService.deleteByInvoiceId(id);
 

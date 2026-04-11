@@ -1,0 +1,3 @@
+ALTER TABLE esgschema.invoice
+    ADD COLUMN vat_amount NUMERIC(12, 2) DEFAULT 0 NOT NULL,
+    ADD COLUMN sum_amount NUMERIC(12, 2) DEFAULT 0 NOT NULL;

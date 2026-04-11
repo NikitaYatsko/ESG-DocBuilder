@@ -24,6 +24,15 @@ public class Invoice {
     @Column(name = "power_kwt")
     private BigDecimal powerKwt;
 
+    @Column(name = "vat_amount")
+    private BigDecimal vatAmount;
+
+    @Column(name = "sum_amount")
+    private BigDecimal sumAmount;
+
+    @Column(name = "sum_marginality", nullable = false)
+    private BigDecimal sumMarginality;
+
     @CreationTimestamp
     @Column(name = "created_at",nullable = false)
     private LocalDateTime createdAt;

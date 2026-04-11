@@ -26,6 +26,9 @@ public class InvoiceMapper {
         response.setId(invoice.getId());
         response.setInvoiceName(invoice.getInvoiceName());
         response.setPower(invoice.getPowerKwt());
+        response.setVat_amount(invoice.getVatAmount());
+        response.setSum(invoice.getSumAmount());
+        response.setSumMarginality(invoice.getSumMarginality());
         response.setCreatedAt(invoice.getCreatedAt());
         response.setUpdatedAt(invoice.getUpdatedAt());
 

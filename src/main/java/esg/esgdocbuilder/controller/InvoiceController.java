@@ -40,6 +40,18 @@ public class InvoiceController {
                 .body(pdfBytes);
     }
 
+    @GetMapping("/{id}/internal-pdf")
+    public ResponseEntity<byte[]> generateInternalPdf(@PathVariable Long id) {
+        ByteArrayOutputStream pdfStream = pdfService.generateInternalInvoicePdf(id);
+        byte[] pdfBytes = pdfStream.toByteArray();
+        InvoiceResponse invoice = invoiceService.getInvoiceById(id);
+        String filename = "internal_smeta_" + invoice.getInvoiceName() + ".pdf";
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfBytes);
+    }
+
     @PostMapping
     public ResponseEntity<InvoiceResponse> createInvoice(@Valid @RequestBody InvoiceRequest request) {
         InvoiceResponse response = invoiceService.createInvoice(request);

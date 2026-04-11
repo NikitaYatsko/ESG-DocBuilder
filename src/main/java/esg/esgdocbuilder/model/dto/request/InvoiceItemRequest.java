@@ -10,17 +10,20 @@ public class InvoiceItemRequest {
     @NotNull
     private Long productId;
 
-    @NotNull
-    @Positive
+
+    @PositiveOrZero
     private BigDecimal quantity;
 
-    @NotNull @PositiveOrZero
+    @PositiveOrZero
     private BigDecimal unitPrice;
 
     @PositiveOrZero
     private BigDecimal vatMultiplier;
 
-    @NotNull @PositiveOrZero
+    @PositiveOrZero
+    private BigDecimal marginality;
+
+    @PositiveOrZero
     private BigDecimal totalPrice;
 
 
