@@ -1,11 +1,11 @@
 package esg.esgdocbuilder.controller;
 
+import esg.esgdocbuilder.model.dto.request.UpdateRoleRequest;
 import esg.esgdocbuilder.model.dto.request.UserRegistrationRequest;
 import esg.esgdocbuilder.model.dto.response.UserProfileResponse;
 import esg.esgdocbuilder.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +31,12 @@ public class UserController {
     @DeleteMapping("/{email}")
     public ResponseEntity<UserProfileResponse> deleteUser(@PathVariable String email) {
         userService.deleteUser(email);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{userid}")
+    public ResponseEntity<Void> updateUser(@PathVariable Long userid, @RequestBody UpdateRoleRequest request) {
+        userService.updateUserRole(userid, request);
         return ResponseEntity.noContent().build();
     }
 }

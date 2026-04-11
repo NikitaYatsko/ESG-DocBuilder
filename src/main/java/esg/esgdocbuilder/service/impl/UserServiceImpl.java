@@ -6,17 +6,18 @@ import esg.esgdocbuilder.exception.exceptions.RoleNotFoundExecption;
 import esg.esgdocbuilder.exception.exceptions.UserAlreadyExistsException;
 import esg.esgdocbuilder.exception.exceptions.UserDoesNotExistsException;
 import esg.esgdocbuilder.mapper.UserMapper;
+import esg.esgdocbuilder.model.dto.request.UpdateRoleRequest;
 import esg.esgdocbuilder.model.dto.request.UserRegistrationRequest;
 import esg.esgdocbuilder.model.dto.response.UserProfileResponse;
 import esg.esgdocbuilder.model.entity.Role;
 import esg.esgdocbuilder.model.entity.User;
 import esg.esgdocbuilder.repository.RoleRepository;
 import esg.esgdocbuilder.repository.UserRepository;
-import esg.esgdocbuilder.service.RefreshTokenService;
 import esg.esgdocbuilder.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -78,6 +79,22 @@ public class UserServiceImpl implements UserService {
                 () -> new UserDoesNotExistsException(ApiErrorMessage.USER_DOES_NOT_EXIST.getMessage()));
 
         userRepository.delete(user);
+
+    }
+
+    @Transactional
+    @Override
+    public void updateUserRole(Long userId, UpdateRoleRequest request) {
+
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new UserDoesNotExistsException(ApiErrorMessage.USER_DOES_NOT_EXIST.getMessage())
+        );
+
+        Role role = roleRepository.findByName(request.getName()).orElseThrow(
+                () -> new RoleNotFoundExecption(ApiErrorMessage.ROLE_NOT_FOUND.getMessage())
+        );
+
+        user.setRoles(Set.of(role));
 
     }
 
