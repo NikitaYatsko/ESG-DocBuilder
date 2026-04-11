@@ -47,16 +47,16 @@ public class PdfServiceImpl implements PdfService {
 
             // Заголовок
             document.add(new Paragraph("Список продуктов")
-                    .setFontSize(18)
+                    .setFontSize(16)
                     .setBold()
                     .setMarginBottom(10));
 
             // Таблица
-            float[] columnWidths = {50F, 150F, 100F, 100F, 120F, 80F};
+            float[] columnWidths = {1F, 3F, 2F, 2F, 3F, 1F};
             Table table = new Table(columnWidths);
             table.setWidth(UnitValue.createPercentValue(100));
 
-            // Заголовки
+// Заголовки
             String[] headers = {"ID", "Название", "Цена Покупки", "Цена Продажи", "Категория", "Маржинальность"};
             for (String header : headers) {
                 Cell cell = new Cell()
@@ -66,11 +66,11 @@ public class PdfServiceImpl implements PdfService {
                         .setTextAlignment(TextAlignment.CENTER)
                         .setVerticalAlignment(VerticalAlignment.MIDDLE)
                         .setPadding(5)
-                        .setBorder(new SolidBorder(BORDER_COLOR, 1)); // границы заголовка
+                        .setBorder(new SolidBorder(BORDER_COLOR, 1));
                 table.addHeaderCell(cell);
             }
 
-            // Данные
+// Данные
             boolean alternate = false;
             for (Product product : products) {
                 DeviceRgb rowColor = alternate ? ROW_BG_COLOR_2 : ROW_BG_COLOR_1;
@@ -78,8 +78,8 @@ public class PdfServiceImpl implements PdfService {
 
                 table.addCell(createCell(String.valueOf(product.getId()), rowColor));
                 table.addCell(createCell(product.getName(), rowColor));
-                table.addCell(createCell(product.getCostPrice() + "MDL", rowColor));
-                table.addCell(createCell(product.getSellPrice() + "MDL", rowColor));
+                table.addCell(createCell(product.getCostPrice() + " MDL", rowColor));
+                table.addCell(createCell(product.getSellPrice() + " MDL", rowColor));
                 table.addCell(createCell(product.getCategory().getName(), rowColor));
                 table.addCell(createCell(product.getMarginality() + "%", rowColor));
             }
