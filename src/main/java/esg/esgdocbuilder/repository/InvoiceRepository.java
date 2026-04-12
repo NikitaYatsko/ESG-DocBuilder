@@ -13,6 +13,6 @@ public interface InvoiceRepository extends JpaRepository <Invoice, Long> {
     List<Invoice> findAll();
 
     @Override
-    @EntityGraph(attributePaths = "invoiceItems")
+    @EntityGraph(attributePaths = {"invoiceItems", "invoiceItems.product", "invoiceItems.product.category"})
     Optional<Invoice> findById(Long id);
 }

@@ -20,6 +20,7 @@ public class InvoiceItemMapper {
         response.setQuantity(item.getQuantity());
         response.setUnitPrice(item.getUnitPrice());
         response.setVatMultiplier(item.getVatMultiplier());
+        response.setMarginality(item.getMarginality());
         response.setTotalPrice(item.getTotalPrice());
         return response;
     }
@@ -32,6 +33,7 @@ public class InvoiceItemMapper {
         item.setQuantity(request.getQuantity());
         item.setUnitPrice(request.getUnitPrice());
         item.setVatMultiplier(request.getVatMultiplier());
+        item.setMarginality(request.getMarginality());
         item.setTotalPrice(request.getTotalPrice());
         return item;
     }

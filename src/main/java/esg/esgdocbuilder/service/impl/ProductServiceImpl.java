@@ -3,9 +3,11 @@ package esg.esgdocbuilder.service.impl;
 import esg.esgdocbuilder.constants.ApiErrorMessage;
 import esg.esgdocbuilder.exception.exceptions.CategoryNotFoundException;
 import esg.esgdocbuilder.exception.exceptions.ProductNotFoundException;
+import esg.esgdocbuilder.mapper.CategoryMapper;
 import esg.esgdocbuilder.mapper.ProductMapper;
 import esg.esgdocbuilder.model.dto.request.NewProductRequest;
 
+import esg.esgdocbuilder.model.dto.response.CategoryResponse;
 import esg.esgdocbuilder.model.dto.response.PaginationResponse;
 import esg.esgdocbuilder.model.dto.response.ProductResponse;
 import esg.esgdocbuilder.model.entity.Category;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 
@@ -29,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
-
+    private final CategoryMapper categoryMapper;
 
     @Override
     public ProductResponse getProductById(Long id) {
@@ -38,6 +41,24 @@ public class ProductServiceImpl implements ProductService {
                         ApiErrorMessage.PRODUCT_NOT_FOUND.getMessage()));
         return productMapper.toResponse(product);
     }
+
+    public List<CategoryResponse> getAllCategory (){
+        return categoryRepository.findAll().stream().map(categoryMapper::toResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductResponse> getProductsByCategory(Long categoryId){
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new CategoryNotFoundException(
+                    ApiErrorMessage.CATEGORY_NOT_FOUND.getMessage()
+            );
+        }
+        List<Product> products = productRepository.findByCategoryId(categoryId);
+        return products.stream()
+                .map(productMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public ProductResponse createProduct(NewProductRequest request) {

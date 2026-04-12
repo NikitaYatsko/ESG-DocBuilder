@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +18,20 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "invoice_number",nullable = false)
-    private String invoiceNumber;
+    @Column(name = "invoice_name",nullable = false)
+    private String invoiceName;
+
+    @Column(name = "power_kwt")
+    private BigDecimal powerKwt;
+
+    @Column(name = "vat_amount")
+    private BigDecimal vatAmount;
+
+    @Column(name = "sum_amount")
+    private BigDecimal sumAmount;
+
+    @Column(name = "sum_marginality", nullable = false)
+    private BigDecimal sumMarginality;
 
     @CreationTimestamp
     @Column(name = "created_at",nullable = false)

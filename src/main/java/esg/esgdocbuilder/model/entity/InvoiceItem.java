@@ -21,6 +21,9 @@ public class InvoiceItem {
     @JoinColumn(name = "product_id",nullable = false)
     private Product product;
 
+    @Column(name = "marginality", nullable = false)
+    private BigDecimal marginality;
+
     @Column(name = "quantity", nullable = false)
     private BigDecimal quantity;
 

@@ -1,6 +1,7 @@
 package esg.esgdocbuilder.service;
 
 import esg.esgdocbuilder.model.dto.request.NewProductRequest;
+import esg.esgdocbuilder.model.dto.response.CategoryResponse;
 import esg.esgdocbuilder.model.dto.response.PaginationResponse;
 import esg.esgdocbuilder.model.dto.response.ProductResponse;
 import esg.esgdocbuilder.model.entity.Product;
@@ -16,9 +17,13 @@ public interface ProductService {
 
     PaginationResponse<ProductResponse> getAllProducts(Pageable pageable);
 
+    List<CategoryResponse> getAllCategory ();
+  
     List<Product> getAllProducts();
 
     ProductResponse updateProduct( NewProductRequest request, Long id);
 
     void deleteProduct(Long id);
+
+    List<ProductResponse> getProductsByCategory(Long categoryId);
 }

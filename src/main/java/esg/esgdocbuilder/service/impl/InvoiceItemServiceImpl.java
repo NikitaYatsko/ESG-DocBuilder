@@ -88,7 +88,6 @@ public class InvoiceItemServiceImpl implements InvoiceItemService {
         itemRepository.delete(item);
         invoice.setUpdatedAt(LocalDateTime.now());
         invoiceRepository.save(invoice);
-
     }
 
 

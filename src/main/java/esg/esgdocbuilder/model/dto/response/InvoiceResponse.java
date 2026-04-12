@@ -9,9 +9,13 @@ import java.util.List;
 @Data
 public class InvoiceResponse {
     private Long id;
-    private String invoiceNumber;
+    private String invoiceName;
+    private BigDecimal power;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<InvoiceItemResponse> items;
     private BigDecimal totalAmount;
+    private BigDecimal vat_amount;
+    private BigDecimal sumMarginality;
+    private BigDecimal sum;
 }

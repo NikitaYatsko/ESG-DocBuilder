@@ -1,8 +1,10 @@
 package esg.esgdocbuilder.controller;
 
 import esg.esgdocbuilder.model.dto.request.NewProductRequest;
+import esg.esgdocbuilder.model.dto.response.CategoryResponse;
 import esg.esgdocbuilder.model.dto.response.PaginationResponse;
 import esg.esgdocbuilder.model.dto.response.ProductResponse;
+import esg.esgdocbuilder.repository.CategoryRepository;
 import esg.esgdocbuilder.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +30,17 @@ public class ProductController {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(productService.getAllProducts(pageable));
 
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<ProductResponse>> getProductsByCategory(@PathVariable Long categoryId) {
+
+        return ResponseEntity.ok(productService.getProductsByCategory(categoryId));
+    }
+
+    @GetMapping("/category")
+    public ResponseEntity<List<CategoryResponse>> getAllCategory() {
+        return ResponseEntity.ok(productService.getAllCategory());
     }
 
     @DeleteMapping("/{id}")

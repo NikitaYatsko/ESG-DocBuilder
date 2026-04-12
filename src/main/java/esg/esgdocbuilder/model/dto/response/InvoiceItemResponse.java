@@ -13,5 +13,6 @@ public class InvoiceItemResponse {
     private BigDecimal quantity;
     private BigDecimal unitPrice;
     private BigDecimal vatMultiplier;
+    private BigDecimal marginality;
     private BigDecimal totalPrice;
 }
