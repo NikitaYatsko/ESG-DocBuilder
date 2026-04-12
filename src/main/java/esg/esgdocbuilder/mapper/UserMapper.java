@@ -21,6 +21,7 @@ public class UserMapper {
             return null;
         }
         UserProfileResponse userProfileResponse = new UserProfileResponse();
+        userProfileResponse.setId(user.getId());
         userProfileResponse.setImageUrl(user.getImageUrl());
         userProfileResponse.setEmail(user.getEmail());
         userProfileResponse.setFullName(user.getFullName());

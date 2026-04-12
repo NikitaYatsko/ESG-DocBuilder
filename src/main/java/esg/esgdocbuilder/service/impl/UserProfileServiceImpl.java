@@ -12,6 +12,7 @@ import esg.esgdocbuilder.model.dto.response.UserProfileResponse;
 import esg.esgdocbuilder.model.entity.User;
 import esg.esgdocbuilder.repository.UserRepository;
 import esg.esgdocbuilder.service.UserProfileService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class UserProfileServiceImpl implements UserProfileService {
         return userMapper.getUserProfile(getCurrentUser());
     }
 
+    @Transactional
     @Override
     public UserProfileResponse uploadUserPhoto(MultipartFile file) {
         if (file == null || file.isEmpty()) {
@@ -54,6 +56,7 @@ public class UserProfileServiceImpl implements UserProfileService {
         }
     }
 
+    @Transactional
     @Override
     public UserProfileResponse updateUserProfile(UpdateUserData updateUserData) {
         User user = getCurrentUser();

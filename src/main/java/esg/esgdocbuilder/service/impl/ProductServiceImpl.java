@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -111,6 +112,11 @@ public class ProductServiceImpl implements ProductService {
                         dtos.getTotalPages()
                 )
         );
+    }
+
+    @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
     }
 
     @Override
