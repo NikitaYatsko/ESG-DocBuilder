@@ -3,7 +3,7 @@ package esg.esgdocbuilder.controller;
 import esg.esgdocbuilder.model.dto.request.InvoiceRequest;
 import esg.esgdocbuilder.model.dto.response.InvoiceResponse;
 import esg.esgdocbuilder.service.InvoiceService;
-import esg.esgdocbuilder.service.sevicePdf.PdfService;
+import esg.esgdocbuilder.service.PdfService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
