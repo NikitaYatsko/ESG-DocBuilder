@@ -92,7 +92,7 @@ public class PdfServiceImpl implements PdfService {
             BigDecimal totalVat = invoice.getVat_amount() != null ? invoice.getVat_amount() : BigDecimal.ZERO;
             BigDecimal totalAmount = invoice.getSum() != null ? invoice.getSum() : BigDecimal.ZERO;
 
-            Table totalTable = new Table(UnitValue.createPercentArray(new float[]{50, 50}));
+            Table totalTable = new Table(UnitValue.createPercentArray(new float[]{45, 55}));
             totalTable.setWidth(UnitValue.createPercentValue(100));
             totalTable.setMarginTop(5);
 
@@ -152,14 +152,16 @@ public class PdfServiceImpl implements PdfService {
             BigDecimal totalAmount = invoice.getSum() != null ? invoice.getSum() : BigDecimal.ZERO;
             BigDecimal totalMarginality = invoice.getSumMarginality() != null ? invoice.getSumMarginality() : BigDecimal.ZERO;
 
-            Table totalTable = new Table(UnitValue.createPercentArray(new float[]{33, 33, 34}));
+            Table totalTable = new Table(UnitValue.createPercentArray(new float[]{30, 30, 40}));
             totalTable.setWidth(UnitValue.createPercentValue(100));
             totalTable.setMarginTop(5);
 
             addTotalCell(totalTable, font, "Итого НДС: " + totalVat + " MDL");
             addTotalCell(totalTable, font, "Итого СЭС: " + totalAmount + " MDL");
-            addTotalCell(totalTable, font, "Итого маржинальность: " + totalMarginality + " MDL");
+            addTotalCell(totalTable, font, "Итого Маржинальность: " + totalMarginality + " MDL");
 
+
+            totalTable.setKeepTogether(true);
             document.add(totalTable);
             document.close();
             log.info("Внутренний PDF для сметы {} успешно сгенерирован", invoice.getInvoiceName());
@@ -255,7 +257,7 @@ public class PdfServiceImpl implements PdfService {
     }
 
     private Table createInternalTable(PdfFont font) {
-        float[] columnWidths = {180, 50, 60, 55, 50, 70};
+        float[] columnWidths = {200, 50, 60, 50, 45, 70};
         Table table = new Table(UnitValue.createPointArray(columnWidths));
         table.setWidth(UnitValue.createPercentValue(100));
 
@@ -266,6 +268,7 @@ public class PdfServiceImpl implements PdfService {
                     .setBackgroundColor(HEADER_BG_COLOR)
                     .setFontColor(ColorConstants.WHITE)
                     .setTextAlignment(TextAlignment.CENTER)
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
                     .setPadding(2)
                     .setBorder(new SolidBorder(BORDER_COLOR, 0.5f));
             table.addCell(cell);
@@ -277,7 +280,7 @@ public class PdfServiceImpl implements PdfService {
         Color bgColor = isEvenRow ? ROW_BG_COLOR_2 : ROW_BG_COLOR_1;
         Border border = new SolidBorder(BORDER_COLOR, 0.5f);
 
-        table.addCell(createDataCell(font, item.getNameProduct(), bgColor, border, 8, TextAlignment.LEFT));
+        table.addCell(createDataCell(font, item.getNameProduct(), bgColor, border, 7, TextAlignment.LEFT));
         table.addCell(createDataCell(font, item.getQuantity().toString(), bgColor, border, 8, TextAlignment.RIGHT));
         table.addCell(createDataCell(font, item.getUnitPrice().toString(), bgColor, border, 8, TextAlignment.RIGHT));
         table.addCell(createDataCell(font, item.getVatMultiplier().toString(), bgColor, border, 8, TextAlignment.RIGHT));
@@ -301,16 +304,17 @@ public class PdfServiceImpl implements PdfService {
                 .add(new Paragraph(text).setFont(font).setFontSize(fontSize))
                 .setBackgroundColor(bgColor)
                 .setTextAlignment(align)
+                .setVerticalAlignment(VerticalAlignment.MIDDLE)
                 .setBorder(border)
                 .setPadding(2);
     }
 
     private void addTotalCell(Table table, PdfFont font, String text) {
-        Paragraph paragraph = new Paragraph(text).setFont(font).setFontSize(10).setTextAlignment(TextAlignment.RIGHT).setMargin(0);
+        Paragraph paragraph = new Paragraph(text).setFont(font).setFontSize(8).setTextAlignment(TextAlignment.RIGHT).setMargin(0);
         Cell cell = new Cell().add(paragraph)
                 .setBackgroundColor(TOTAL_BG_COLOR)
                 .setBorder(new SolidBorder(BORDER_COLOR, 0.5f))
-                .setPadding(4)
+                .setPadding(3)
                 .setTextAlignment(TextAlignment.RIGHT);
         table.addCell(cell);
     }
