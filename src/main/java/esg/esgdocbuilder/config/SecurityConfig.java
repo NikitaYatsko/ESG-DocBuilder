@@ -41,7 +41,9 @@ public class SecurityConfig {
 
         config.setAllowedOriginPatterns(List.of(
                 "http://localhost:5173",
-                "https://esg-docbuilder-xhuf.onrender.com"
+                "https://esg-docbuilder-xhuf.onrender.com",
+                "https://docbuilder-application.up.railway.app",
+                "https://docbuilder-copy-production.up.railway.app"
         ));
 
         config.setAllowedMethods(List.of("*"));
