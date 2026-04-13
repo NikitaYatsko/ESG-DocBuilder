@@ -31,7 +31,7 @@ public class Product {
     @Column(name = "sell_price", nullable = false, precision = 12, scale = 2)
     private BigDecimal sellPrice;
 
-    @Column(name = "marginality", nullable = false, precision = 5, scale = 2)
+    @Column(name = "marginality", nullable = false, precision = 12, scale = 2)
     private BigDecimal marginality;
 
     @Column(name = "vat")
