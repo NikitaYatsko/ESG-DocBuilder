@@ -2,6 +2,7 @@ package esg.esgdocbuilder.controller;
 
 import esg.esgdocbuilder.model.dto.request.InvoiceRequest;
 import esg.esgdocbuilder.model.dto.response.InvoiceResponse;
+import esg.esgdocbuilder.model.dto.response.InvoiceTitleResponse;
 import esg.esgdocbuilder.service.InvoiceService;
 import esg.esgdocbuilder.service.PdfService;
 import jakarta.validation.Valid;
@@ -66,6 +67,12 @@ public class InvoiceController {
     @GetMapping
     public ResponseEntity<List<InvoiceResponse>> getAllInvoices() {
         return ResponseEntity.ok(invoiceService.getAllInvoices());
+    }
+
+
+    @GetMapping("/invoice-title")
+    public ResponseEntity<List<InvoiceTitleResponse>> getInvoiceAllTitle() {
+        return ResponseEntity.ok(invoiceService.getInvoiceAllTitle());
     }
 
     @PutMapping("/{id}")

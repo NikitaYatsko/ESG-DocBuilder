@@ -3,9 +3,11 @@ package esg.esgdocbuilder.service.impl;
 import esg.esgdocbuilder.constants.ApiErrorMessage;
 import esg.esgdocbuilder.exception.exceptions.InvoiceNotFoundException;
 import esg.esgdocbuilder.mapper.InvoiceMapper;
+import esg.esgdocbuilder.mapper.InvoiceTitleMapper;
 import esg.esgdocbuilder.model.dto.request.InvoiceItemRequest;
 import esg.esgdocbuilder.model.dto.request.InvoiceRequest;
 import esg.esgdocbuilder.model.dto.response.InvoiceResponse;
+import esg.esgdocbuilder.model.dto.response.InvoiceTitleResponse;
 import esg.esgdocbuilder.model.entity.Invoice;
 import esg.esgdocbuilder.repository.InvoiceRepository;
 import esg.esgdocbuilder.service.InvoiceItemService;
@@ -30,6 +32,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final InvoiceItemService itemService;
     private final InvoiceMapper invoiceMapper;
+    private final InvoiceTitleMapper invoiceTitleMapper;
 
 
     @Override
@@ -65,6 +68,11 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public List<InvoiceResponse> getAllInvoices (){
         return invoiceRepository.findAll().stream().map(invoiceMapper::toResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<InvoiceTitleResponse> getInvoiceAllTitle (){
+        return invoiceRepository.findAll().stream().map(invoiceTitleMapper::toResponse).collect(Collectors.toList());
     }
 
 
