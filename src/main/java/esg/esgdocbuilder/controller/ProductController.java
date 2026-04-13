@@ -4,6 +4,7 @@ import esg.esgdocbuilder.model.dto.request.NewProductRequest;
 import esg.esgdocbuilder.model.dto.response.CategoryResponse;
 import esg.esgdocbuilder.model.dto.response.PaginationResponse;
 import esg.esgdocbuilder.model.dto.response.ProductResponse;
+import esg.esgdocbuilder.model.entity.Product;
 import esg.esgdocbuilder.repository.CategoryRepository;
 import esg.esgdocbuilder.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,12 @@ public class ProductController {
         return ResponseEntity.ok(productService.getAllProducts(pageable));
 
     }
+
+    @GetMapping("/all-products")
+    public ResponseEntity<List<Product>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
+    }
+
 
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<List<ProductResponse>> getProductsByCategory(@PathVariable Long categoryId) {
