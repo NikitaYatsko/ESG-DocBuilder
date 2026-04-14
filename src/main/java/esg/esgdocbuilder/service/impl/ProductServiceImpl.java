@@ -12,12 +12,14 @@ import esg.esgdocbuilder.model.dto.response.PaginationResponse;
 import esg.esgdocbuilder.model.dto.response.ProductResponse;
 import esg.esgdocbuilder.model.entity.Category;
 import esg.esgdocbuilder.model.entity.Product;
+import esg.esgdocbuilder.model.enums.TypeOfUnitEnum;
 import esg.esgdocbuilder.repository.CategoryRepository;
 import esg.esgdocbuilder.repository.ProductRepository;
 import esg.esgdocbuilder.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +35,7 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
     private final CategoryMapper categoryMapper;
+    private final int minSearch = 3;
 
     @Override
     public ProductResponse getProductById(Long id) {
@@ -42,22 +45,11 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toResponse(product);
     }
 
-    public List<CategoryResponse> getAllCategory (){
+    public List<CategoryResponse> getAllCategory() {
         return categoryRepository.findAll().stream().map(categoryMapper::toResponse).collect(Collectors.toList());
     }
 
-    @Override
-    public List<ProductResponse> getProductsByCategory(Long categoryId){
-        if (!categoryRepository.existsById(categoryId)) {
-            throw new CategoryNotFoundException(
-                    ApiErrorMessage.CATEGORY_NOT_FOUND.getMessage()
-            );
-        }
-        List<Product> products = productRepository.findByCategoryId(categoryId);
-        return products.stream()
-                .map(productMapper::toResponse)
-                .collect(Collectors.toList());
-    }
+
 
 
     @Override
@@ -118,6 +110,69 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
+
+    //Поиск
+    @Override
+    public PaginationResponse<ProductResponse> searchProducts(String query, Pageable pageable) {
+        String normalizedQuery = query == null ? "" : query.trim().replaceAll("\\s+", " ");
+
+        if (normalizedQuery.length() >= minSearch) {
+        Page<Product> products = productRepository.searchProducts(normalizedQuery, pageable);
+        Page<ProductResponse> dtos = products.map(productMapper::toResponse);
+
+        return new PaginationResponse<>(
+                dtos.getContent(),
+                new PaginationResponse.Pagination(
+                        dtos.getTotalElements(),
+                        pageable.getPageSize(),
+                        dtos.getNumber() + 1,
+                        dtos.getTotalPages()
+                )
+        );
+        }
+        return null;
+    }
+
+    //Фильтры
+    @Override
+    public PaginationResponse<ProductResponse> getProductsByCategory(Long categoryId, Pageable pageable) {
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new CategoryNotFoundException(
+                    ApiErrorMessage.CATEGORY_NOT_FOUND.getMessage()
+            );
+        }
+        Page<Product> products = productRepository.findByCategoryId(categoryId, pageable);
+        Page<ProductResponse> dtos = products.map(productMapper::toResponse);
+
+
+        return new PaginationResponse<>(
+                dtos.getContent(),
+                new PaginationResponse.Pagination(
+                        dtos.getTotalElements(),
+                        pageable.getPageSize(),
+                        dtos.getNumber() + 1,
+                        dtos.getTotalPages()
+                )
+        );
+    }
+
+
+    @Override
+    public PaginationResponse<ProductResponse> getProductsByTypeOfUnit(TypeOfUnitEnum typeOfUnit, Pageable pageable) {
+        Page<Product> products = productRepository.findByTypeOfUnit(typeOfUnit, pageable);
+        Page<ProductResponse> dtos = products.map(productMapper::toResponse);
+
+        return new PaginationResponse<>(
+                dtos.getContent(),
+                new PaginationResponse.Pagination(
+                        dtos.getTotalElements(),
+                        pageable.getPageSize(),
+                        dtos.getNumber() + 1,
+                        dtos.getTotalPages()
+                )
+        );
+    }
+
 
     @Override
     public void deleteProduct(Long id) {
