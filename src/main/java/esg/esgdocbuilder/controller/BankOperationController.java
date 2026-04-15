@@ -39,4 +39,10 @@ public class BankOperationController {
     public ResponseEntity<BankOperationResponse> createBankOperation(@RequestBody BankOperationRequest bankOperationRequest) {
         return ResponseEntity.ok(bankOperationService.createOperation(bankOperationRequest));
     }
+
+    @DeleteMapping("/operations/{id}")
+    public ResponseEntity<Void> deleteBankOperation(@PathVariable Long id) {
+        bankOperationService.deleteOperation(id);
+        return ResponseEntity.noContent().build();
+    }
 }

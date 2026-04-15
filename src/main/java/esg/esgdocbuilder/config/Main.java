@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String password = "dimafrontend";
+        String password = "hardestpasswordever";
         String encodedPassword = passwordEncoder.encode(password);
         System.out.println(encodedPassword);
     }

@@ -33,5 +33,7 @@ public class BankOperation {
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
+    @Column(name = "is_deleted",nullable = false)
+    private boolean isDeleted;
 
 }

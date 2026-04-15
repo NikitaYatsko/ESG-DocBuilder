@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 @Data
 public class BankOperationResponse {
+    private Long id;
     private TypeOfOperationEnums type;
     private BigDecimal amount;
     private String accountName;
