@@ -357,18 +357,19 @@ public class PdfServiceImpl implements PdfService {
     }
 
 
-    private PdfFont getPdfFont() {
-        try (InputStream is = getClass().getResourceAsStream("/fonts/FreeSans.ttf")) {
-            if (is == null) {
-                log.warn("Шрифт FreeSans.ttf не найден, используем стандартный Helvetica");
-                return PdfFontFactory.createFont();
+
+        private PdfFont getPdfFont() {
+            try (InputStream is = getClass().getResourceAsStream("/fonts/FreeSans.ttf")) {
+                if (is == null) {
+                    log.error("Шрифт FreeSans.ttf не найден в classpath");
+                    throw new RuntimeException("Шрифт не найден");
+                }
+                return PdfFontFactory.createFont(is.readAllBytes(), PdfEncodings.IDENTITY_H);
+            } catch (Exception e) {
+                log.error("Ошибка загрузки шрифта", e);
+                throw new RuntimeException("Не удалось загрузить шрифт", e);
             }
-            return PdfFontFactory.createFont(is.readAllBytes(), PdfEncodings.IDENTITY_H);
-        } catch (Exception e) {
-            log.error("Ошибка загрузки шрифта", e);
-            throw new RuntimeException("Не удалось загрузить шрифт", e);
         }
-    }
 
 
 
