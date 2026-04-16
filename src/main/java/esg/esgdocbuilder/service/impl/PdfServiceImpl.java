@@ -26,6 +26,7 @@ import esg.esgdocbuilder.service.InvoiceService;
 import esg.esgdocbuilder.service.PdfService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -358,18 +359,19 @@ public class PdfServiceImpl implements PdfService {
 
 
 
-        private PdfFont getPdfFont() {
-            try (InputStream is = getClass().getResourceAsStream("/fonts/FreeSans.ttf")) {
-                if (is == null) {
-                    log.error("Шрифт FreeSans.ttf не найден в classpath");
-                    throw new RuntimeException("Шрифт не найден");
+            private PdfFont getPdfFont() {
+                try (InputStream is = getClass().getResourceAsStream("/fonts/FreeSans.ttf")) {
+                    if (is == null) {
+                        log.error("Критическая ошибка: Файл шрифта FreeSans.ttf не найден в classpath по пути '/fonts/FreeSans.ttf'");
+                        throw new RuntimeException("Шрифт для PDF не найден. Пожалуйста, проверьте наличие файла в resources.");
+                    }
+                    byte[] fontBytes = IOUtils.toByteArray(is);
+                    return PdfFontFactory.createFont(fontBytes, PdfEncodings.IDENTITY_H);
+                } catch (Exception e) {
+                    log.error("Ошибка загрузки или создания шрифта из resources", e);
+                    throw new RuntimeException("Не удалось загрузить шрифт для генерации PDF", e);
                 }
-                return PdfFontFactory.createFont(is.readAllBytes(), PdfEncodings.IDENTITY_H);
-            } catch (Exception e) {
-                log.error("Ошибка загрузки шрифта", e);
-                throw new RuntimeException("Не удалось загрузить шрифт", e);
             }
-        }
 
 
 
