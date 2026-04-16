@@ -357,21 +357,20 @@ public class PdfServiceImpl implements PdfService {
         table.addCell(createDataCell(font, item.getTotalPrice().toString(), bgColor, border, 8, TextAlignment.RIGHT));
     }
 
-
-
-            private PdfFont getPdfFont() {
-                try (InputStream is = getClass().getResourceAsStream("/fonts/FreeSans.ttf")) {
-                    if (is == null) {
-                        log.error("Критическая ошибка: Файл шрифта FreeSans.ttf не найден в classpath по пути '/fonts/FreeSans.ttf'");
-                        throw new RuntimeException("Шрифт для PDF не найден. Пожалуйста, проверьте наличие файла в resources.");
-                    }
-                    byte[] fontBytes = IOUtils.toByteArray(is);
-                    return PdfFontFactory.createFont(fontBytes, PdfEncodings.IDENTITY_H);
-                } catch (Exception e) {
-                    log.error("Ошибка загрузки или создания шрифта из resources", e);
-                    throw new RuntimeException("Не удалось загрузить шрифт для генерации PDF", e);
-                }
+    private PdfFont getPdfFont() {
+        try (InputStream is = getClass().getResourceAsStream("/fonts/DejaVuSans.ttf")) {
+            if (is == null) {
+                log.error("Critical error: Font file DejaVuSans.ttf not found in classpath at '/fonts/DejaVuSans.ttf'");
+                throw new RuntimeException("Font for PDF not found. Please ensure DejaVuSans.ttf is in src/main/resources/fonts/");
             }
+            byte[] fontBytes = IOUtils.toByteArray(is);
+            return PdfFontFactory.createFont(fontBytes, PdfEncodings.IDENTITY_H);
+        } catch (Exception e) {
+            log.error("Error loading or creating font from resources", e);
+            throw new RuntimeException("Failed to load font for PDF generation", e);
+        }
+    }
+
 
 
 
