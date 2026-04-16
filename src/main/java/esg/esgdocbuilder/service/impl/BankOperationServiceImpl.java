@@ -2,6 +2,7 @@ package esg.esgdocbuilder.service.impl;
 
 import esg.esgdocbuilder.constants.ApiErrorMessage;
 import esg.esgdocbuilder.exception.exceptions.AccountNotFoundException;
+import esg.esgdocbuilder.exception.exceptions.BankOperationNotFoundException;
 import esg.esgdocbuilder.mapper.BankOperationMapper;
 import esg.esgdocbuilder.model.dto.AccountDTO;
 import esg.esgdocbuilder.model.dto.request.BankOperationRequest;
@@ -13,7 +14,9 @@ import esg.esgdocbuilder.model.enums.TypeOfOperationEnums;
 import esg.esgdocbuilder.repository.AccountRepository;
 import esg.esgdocbuilder.repository.BankOperationRepository;
 import esg.esgdocbuilder.service.BankOperationService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -49,7 +52,7 @@ public class BankOperationServiceImpl implements BankOperationService {
 
     @Override
     public PaginationResponse<BankOperationResponse> getAllOperations(Pageable pageable) {
-        Page<BankOperation> bankOperations = bankOperationRepository.findAll(pageable);
+        Page<BankOperation> bankOperations = bankOperationRepository.findAllByIsDeletedFalse(pageable);
         Page<BankOperationResponse> dtos = bankOperations.map(bankOperationMapper::toResponse);
         return new PaginationResponse<>(
                 dtos.getContent(),
@@ -67,5 +70,15 @@ public class BankOperationServiceImpl implements BankOperationService {
     public List<AccountDTO> getAllAccounts() {
         List<Account> accounts = accountRepository.findAll();
         return accounts.stream().map(bankOperationMapper::toDTO).toList();
+    }
+
+    @Transactional
+    @Override
+    public void deleteOperation(Long id) {
+        BankOperation operation = bankOperationRepository.findById(id).orElseThrow(
+                () -> new BankOperationNotFoundException(ApiErrorMessage.ACCOUNT_NOT_FOUND.getMessage())
+        );
+        operation.setDeleted(true);
+
     }
 }

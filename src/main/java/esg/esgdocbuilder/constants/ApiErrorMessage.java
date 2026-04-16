@@ -21,6 +21,7 @@ public enum ApiErrorMessage {
     USER_ALREADY_EXISTS("User already exist"),
     PASSWORD_DOES_NOT_MATCH("Password doesn't match"),
     ROLE_NOT_FOUND("Role not found"),
+    BANK_OPERATION_NOT_FOUND("Bank operation not found"),
     ;
 
 

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 public class BankOperationMapper {
     public BankOperationResponse toResponse(BankOperation bankOperation) {
         return BankOperationResponse.builder()
+                .id(bankOperation.getId())
                 .type(bankOperation.getType())
                 .amount(bankOperation.getAmount())
                 .accountName(bankOperation.getAccount().getName())
