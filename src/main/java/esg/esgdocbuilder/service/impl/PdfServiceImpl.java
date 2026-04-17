@@ -59,7 +59,7 @@ public class PdfServiceImpl implements PdfService {
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
 
-            
+
             PdfFont font = PdfFontFactory.createFont(
                     "fonts/FreeSans.ttf",
                     PdfEncodings.IDENTITY_H

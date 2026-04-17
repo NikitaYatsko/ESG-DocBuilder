@@ -14,10 +14,7 @@ public class InvoiceRequest {
     @NotBlank(message = "Название сметы обязательно")
     private String invoiceName;
 
-
     private BigDecimal power;
-
-
     @PositiveOrZero
     private BigDecimal vat_amount;
 
