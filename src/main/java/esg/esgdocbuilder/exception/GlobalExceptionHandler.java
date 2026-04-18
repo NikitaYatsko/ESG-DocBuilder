@@ -36,7 +36,8 @@ public class GlobalExceptionHandler {
             UserDoesNotExistsException.class,
             InvoiceNotFoundException.class,
             RefreshTokenNotFoundException.class,
-            AccountNotFoundException.class
+            AccountNotFoundException.class,
+            BankOperationNotFoundException.class,
     })
     public ResponseEntity<ErrorResponse> handleNotFound(RuntimeException ex) {
         return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND);

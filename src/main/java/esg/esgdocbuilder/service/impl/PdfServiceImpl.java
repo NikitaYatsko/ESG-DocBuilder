@@ -26,9 +26,11 @@ import esg.esgdocbuilder.service.InvoiceService;
 import esg.esgdocbuilder.service.PdfService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -59,11 +61,8 @@ public class PdfServiceImpl implements PdfService {
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
 
-
-            PdfFont font = PdfFontFactory.createFont(
-                    "fonts/FreeSans.ttf",
-                    PdfEncodings.IDENTITY_H
-            );
+            
+            PdfFont font = getPdfFont();
             document.setFont(font);
 
 
@@ -122,10 +121,7 @@ public class PdfServiceImpl implements PdfService {
             Document document = new Document(pdfDoc);
             document.setMargins(5, 36, 36, 36);
 
-            PdfFont font = PdfFontFactory.createFont(
-                    "fonts/FreeSans.ttf",
-                    PdfEncodings.IDENTITY_H
-            );
+            PdfFont font = getPdfFont();
 
             document.add(createHeaderTable(font, invoice));
 
@@ -181,10 +177,7 @@ public class PdfServiceImpl implements PdfService {
             Document document = new Document(pdfDoc);
             document.setMargins(5, 36, 36, 36);
 
-            PdfFont font = PdfFontFactory.createFont(
-                    "fonts/FreeSans.ttf",
-                    PdfEncodings.IDENTITY_H
-            );
+            PdfFont font = getPdfFont();
 
             document.add(createHeaderTable(font, invoice));
 
@@ -239,19 +232,23 @@ public class PdfServiceImpl implements PdfService {
         headerTable.setWidth(UnitValue.createPercentValue(100));
         headerTable.setMarginBottom(5);
 
-        try {
-            String logoPath = getClass().getClassLoader().getResource("img/logo.png").getPath();
-            Image logo = new Image(ImageDataFactory.create(logoPath));
-            logo.setWidth(85);
-            logo.setAutoScale(true);
-            Cell logoCell = new Cell().add(logo)
-                    .setBorder(Border.NO_BORDER)
-                    .setPadding(0)
-                    .setTextAlignment(TextAlignment.LEFT)
-                    .setVerticalAlignment(VerticalAlignment.MIDDLE);
-            headerTable.addCell(logoCell);
+        try (InputStream logoStream = getClass().getResourceAsStream("/img/logo.png")) {
+            if (logoStream == null) {
+                log.warn("Логотип не найден, пропускаем");
+                headerTable.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
+            } else {
+                Image logo = new Image(ImageDataFactory.create(logoStream.readAllBytes()));
+                logo.setWidth(85);
+                logo.setAutoScale(true);
+                Cell logoCell = new Cell().add(logo)
+                        .setBorder(Border.NO_BORDER)
+                        .setPadding(0)
+                        .setTextAlignment(TextAlignment.LEFT)
+                        .setVerticalAlignment(VerticalAlignment.MIDDLE);
+                headerTable.addCell(logoCell);
+            }
         } catch (Exception e) {
-            log.warn("Логотип не найден, пропускаем");
+            log.warn("Логотип не найден, пропускаем", e);
             headerTable.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         }
 
@@ -359,6 +356,23 @@ public class PdfServiceImpl implements PdfService {
         table.addCell(createDataCell(font, item.getVatMultiplier().toString(), bgColor, border, 8, TextAlignment.RIGHT));
         table.addCell(createDataCell(font, item.getTotalPrice().toString(), bgColor, border, 8, TextAlignment.RIGHT));
     }
+
+    private PdfFont getPdfFont() {
+        try (InputStream is = getClass().getResourceAsStream("/fonts/freesans.ttf")) {
+            if (is == null) {
+                log.error("Critical error: Font file DejaVuSans.ttf not found in classpath at '/fonts/DejaVuSans.ttf'");
+                throw new RuntimeException("Font for PDF not found. Please ensure your font is in src/main/resources/fonts/");
+            }
+            byte[] fontBytes = IOUtils.toByteArray(is);
+            return PdfFontFactory.createFont(fontBytes, PdfEncodings.IDENTITY_H);
+        } catch (Exception e) {
+            log.error("Error loading or creating font from resources", e);
+            throw new RuntimeException("Failed to load font for PDF generation", e);
+        }
+    }
+
+
+
 
     private Cell createDataCell(PdfFont font, String text, Color bgColor, Border border, int fontSize, TextAlignment align) {
         return new Cell()

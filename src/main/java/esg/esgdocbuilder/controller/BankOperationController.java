@@ -8,6 +8,7 @@ import esg.esgdocbuilder.service.BankOperationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,12 +32,18 @@ public class BankOperationController {
             @RequestParam(defaultValue = "20") int size
 
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         return ResponseEntity.ok(bankOperationService.getAllOperations(pageable));
     }
 
     @PostMapping("/operations")
     public ResponseEntity<BankOperationResponse> createBankOperation(@RequestBody BankOperationRequest bankOperationRequest) {
         return ResponseEntity.ok(bankOperationService.createOperation(bankOperationRequest));
+    }
+
+    @DeleteMapping("/operations/{id}")
+    public ResponseEntity<Void> deleteBankOperation(@PathVariable Long id) {
+        bankOperationService.deleteOperation(id);
+        return ResponseEntity.noContent().build();
     }
 }

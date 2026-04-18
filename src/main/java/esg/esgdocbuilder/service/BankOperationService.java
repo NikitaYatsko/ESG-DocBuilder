@@ -13,4 +13,5 @@ public interface BankOperationService {
     BankOperationResponse createOperation(BankOperationRequest bankOperationRequest);
     PaginationResponse<BankOperationResponse> getAllOperations(Pageable pageable);
     List<AccountDTO> getAllAccounts();
+    void deleteOperation(Long id);
 }
