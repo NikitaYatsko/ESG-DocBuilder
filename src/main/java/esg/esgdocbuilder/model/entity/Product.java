@@ -45,7 +45,7 @@ public class Product {
     private LocalDateTime createdAt;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
 
     @Enumerated(EnumType.STRING)
