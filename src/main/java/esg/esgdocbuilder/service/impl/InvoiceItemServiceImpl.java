@@ -44,9 +44,6 @@ public class InvoiceItemServiceImpl implements InvoiceItemService {
 
         InvoiceItem item = itemMapper.toEntity(itemRequest, invoice, product);
 
-
-
-
         InvoiceItem savedItem = itemRepository.save(item);
         invoice.setUpdatedAt(LocalDateTime.now());
         invoiceRepository.save(invoice);

@@ -44,6 +44,9 @@ public class Product {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type_of_unit", nullable = false)

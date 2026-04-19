@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -48,8 +47,6 @@ public class ProductServiceImpl implements ProductService {
     public List<CategoryResponse> getAllCategory() {
         return categoryRepository.findAll().stream().map(categoryMapper::toResponse).collect(Collectors.toList());
     }
-
-
 
 
     @Override
@@ -92,7 +89,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public PaginationResponse<ProductResponse> getAllProducts(Pageable pageable) {
 
-        Page<Product> products = productRepository.findAll(pageable);
+        Page<Product> products = productRepository.findAllByIsDeletedFalse(pageable);
         Page<ProductResponse> dtos = products.map(productMapper::toResponse);
 
         return new PaginationResponse<>(
@@ -117,18 +114,18 @@ public class ProductServiceImpl implements ProductService {
         String normalizedQuery = query == null ? "" : query.trim().replaceAll("\\s+", " ");
 
         if (normalizedQuery.length() >= minSearch) {
-        Page<Product> products = productRepository.searchProducts(normalizedQuery, pageable);
-        Page<ProductResponse> dtos = products.map(productMapper::toResponse);
+            Page<Product> products = productRepository.searchProducts(normalizedQuery, pageable);
+            Page<ProductResponse> dtos = products.map(productMapper::toResponse);
 
-        return new PaginationResponse<>(
-                dtos.getContent(),
-                new PaginationResponse.Pagination(
-                        dtos.getTotalElements(),
-                        pageable.getPageSize(),
-                        dtos.getNumber() + 1,
-                        dtos.getTotalPages()
-                )
-        );
+            return new PaginationResponse<>(
+                    dtos.getContent(),
+                    new PaginationResponse.Pagination(
+                            dtos.getTotalElements(),
+                            pageable.getPageSize(),
+                            dtos.getNumber() + 1,
+                            dtos.getTotalPages()
+                    )
+            );
         }
         return null;
     }
@@ -176,9 +173,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(Long id) {
-        if (!productRepository.existsById(id)) {
-            throw new ProductNotFoundException(ApiErrorMessage.PRODUCT_NOT_FOUND.getMessage());
-        }
-        productRepository.deleteById(id);
+        Product product = productRepository.findById(id).orElseThrow(
+                ()-> new ProductNotFoundException(ApiErrorMessage.PRODUCT_NOT_FOUND.getMessage())
+        );
+        product.setIsDeleted(true);
+        productRepository.save(product);
     }
 }
