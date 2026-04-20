@@ -148,12 +148,18 @@ public class PdfServiceImpl implements PdfService {
 
             BigDecimal totalVat = invoice.getVat_amount() != null ? invoice.getVat_amount() : BigDecimal.ZERO;
             BigDecimal totalAmount = invoice.getSum() != null ? invoice.getSum() : BigDecimal.ZERO;
+            BigDecimal discountPercent = invoice.getDiscountPercent() != null ? invoice.getDiscountPercent() : BigDecimal.ZERO;
 
-            Table totalTable = new Table(UnitValue.createPercentArray(new float[]{45, 55}));
+            boolean hasDiscount = discountPercent.compareTo(BigDecimal.ZERO) > 0;
+            float[] columnWidths = hasDiscount ? new float[]{40, 20, 40} : new float[]{45, 55};
+            Table totalTable = new Table(UnitValue.createPercentArray(columnWidths));
             totalTable.setWidth(UnitValue.createPercentValue(100));
             totalTable.setMarginTop(5);
 
             addTotalCell(totalTable, font, "Итого НДС: " + totalVat + " MDL");
+            if (hasDiscount) {
+                addTotalCell(totalTable, font, "Скидка: " + discountPercent + "%");
+            }
             addTotalCell(totalTable, font, "Итого (СЭС): " + totalAmount + " MDL");
 
             document.add(totalTable);
@@ -205,15 +211,27 @@ public class PdfServiceImpl implements PdfService {
             BigDecimal totalVat = invoice.getVat_amount() != null ? invoice.getVat_amount() : BigDecimal.ZERO;
             BigDecimal totalAmount = invoice.getSum() != null ? invoice.getSum() : BigDecimal.ZERO;
             BigDecimal totalMarginality = invoice.getSumMarginality() != null ? invoice.getSumMarginality() : BigDecimal.ZERO;
+            BigDecimal discountPercent = invoice.getDiscountPercent() != null ? invoice.getDiscountPercent() : BigDecimal.ZERO;
 
-            Table totalTable = new Table(UnitValue.createPercentArray(new float[]{30, 30, 40}));
+            boolean hasDiscount = discountPercent.compareTo(BigDecimal.ZERO) > 0;
+
+            float[] columnWidths;
+            if (hasDiscount) {
+                columnWidths = new float[]{25, 15, 30, 30};
+            } else {
+                columnWidths = new float[]{30, 35, 35};
+            }
+
+            Table totalTable = new Table(UnitValue.createPercentArray(columnWidths));
             totalTable.setWidth(UnitValue.createPercentValue(100));
             totalTable.setMarginTop(5);
 
             addTotalCell(totalTable, font, "Итого НДС: " + totalVat + " MDL");
+            if (hasDiscount) {
+                addTotalCell(totalTable, font, "Скидка: " + discountPercent + "%");
+            }
             addTotalCell(totalTable, font, "Итого СЭС: " + totalAmount + " MDL");
             addTotalCell(totalTable, font, "Итого Маржинальность: " + totalMarginality + " MDL");
-
 
             totalTable.setKeepTogether(true);
             document.add(totalTable);

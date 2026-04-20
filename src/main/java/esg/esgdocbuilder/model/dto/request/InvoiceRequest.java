@@ -19,6 +19,9 @@ public class InvoiceRequest {
     private BigDecimal vat_amount;
 
     @PositiveOrZero
+    private BigDecimal discountPercent;
+
+    @PositiveOrZero
     private BigDecimal sumMarginality;
 
     @PositiveOrZero
