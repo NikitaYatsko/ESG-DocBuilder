@@ -318,7 +318,7 @@ public class PdfServiceImpl implements PdfService {
         Table table = new Table(UnitValue.createPointArray(columnWidths));
         table.setWidth(UnitValue.createPercentValue(100));
 
-        String[] headers = {"Наименование", "Кол-во", "Цена", "НДС", "Итого MDL"};
+        String[] headers = {"Наименование", "Кол-во", "Цена", "НДС / ШТ", "Итого MDL"};
         for (String header : headers) {
             Cell cell = new Cell()
                     .add(new Paragraph(header).setFont(font).setFontSize(9))
@@ -337,7 +337,7 @@ public class PdfServiceImpl implements PdfService {
         Table table = new Table(UnitValue.createPointArray(columnWidths));
         table.setWidth(UnitValue.createPercentValue(100));
 
-        String[] headers = {"Наименование", "Кол-во", "Цена", "Маржинальность", "НДС", "Итого MDL"};
+        String[] headers = {"Наименование", "Кол-во", "Цена", "Маржинальность", "НДС / ШТ", "Итого MDL"};
         for (String header : headers) {
             Cell cell = new Cell()
                     .add(new Paragraph(header).setFont(font).setFontSize(9))
