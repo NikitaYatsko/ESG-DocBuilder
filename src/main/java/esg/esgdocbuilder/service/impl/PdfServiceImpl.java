@@ -148,12 +148,18 @@ public class PdfServiceImpl implements PdfService {
 
             BigDecimal totalVat = invoice.getVat_amount() != null ? invoice.getVat_amount() : BigDecimal.ZERO;
             BigDecimal totalAmount = invoice.getSum() != null ? invoice.getSum() : BigDecimal.ZERO;
+            BigDecimal discountPercent = invoice.getDiscountPercent() != null ? invoice.getDiscountPercent() : BigDecimal.ZERO;
 
-            Table totalTable = new Table(UnitValue.createPercentArray(new float[]{45, 55}));
+            boolean hasDiscount = discountPercent.compareTo(BigDecimal.ZERO) > 0;
+            float[] columnWidths = hasDiscount ? new float[]{40, 20, 40} : new float[]{45, 55};
+            Table totalTable = new Table(UnitValue.createPercentArray(columnWidths));
             totalTable.setWidth(UnitValue.createPercentValue(100));
             totalTable.setMarginTop(5);
 
             addTotalCell(totalTable, font, "Итого НДС: " + totalVat + " MDL");
+            if (hasDiscount) {
+                addTotalCell(totalTable, font, "Скидка: " + discountPercent + "%");
+            }
             addTotalCell(totalTable, font, "Итого (СЭС): " + totalAmount + " MDL");
 
             document.add(totalTable);
@@ -205,15 +211,27 @@ public class PdfServiceImpl implements PdfService {
             BigDecimal totalVat = invoice.getVat_amount() != null ? invoice.getVat_amount() : BigDecimal.ZERO;
             BigDecimal totalAmount = invoice.getSum() != null ? invoice.getSum() : BigDecimal.ZERO;
             BigDecimal totalMarginality = invoice.getSumMarginality() != null ? invoice.getSumMarginality() : BigDecimal.ZERO;
+            BigDecimal discountPercent = invoice.getDiscountPercent() != null ? invoice.getDiscountPercent() : BigDecimal.ZERO;
 
-            Table totalTable = new Table(UnitValue.createPercentArray(new float[]{30, 30, 40}));
+            boolean hasDiscount = discountPercent.compareTo(BigDecimal.ZERO) > 0;
+
+            float[] columnWidths;
+            if (hasDiscount) {
+                columnWidths = new float[]{25, 15, 30, 30};
+            } else {
+                columnWidths = new float[]{30, 35, 35};
+            }
+
+            Table totalTable = new Table(UnitValue.createPercentArray(columnWidths));
             totalTable.setWidth(UnitValue.createPercentValue(100));
             totalTable.setMarginTop(5);
 
             addTotalCell(totalTable, font, "Итого НДС: " + totalVat + " MDL");
+            if (hasDiscount) {
+                addTotalCell(totalTable, font, "Скидка: " + discountPercent + "%");
+            }
             addTotalCell(totalTable, font, "Итого СЭС: " + totalAmount + " MDL");
             addTotalCell(totalTable, font, "Итого Маржинальность: " + totalMarginality + " MDL");
-
 
             totalTable.setKeepTogether(true);
             document.add(totalTable);
@@ -300,7 +318,7 @@ public class PdfServiceImpl implements PdfService {
         Table table = new Table(UnitValue.createPointArray(columnWidths));
         table.setWidth(UnitValue.createPercentValue(100));
 
-        String[] headers = {"Наименование", "Кол-во", "Цена", "НДС", "Итого MDL"};
+        String[] headers = {"Наименование", "Кол-во", "Цена", "НДС / ШТ", "Итого MDL"};
         for (String header : headers) {
             Cell cell = new Cell()
                     .add(new Paragraph(header).setFont(font).setFontSize(9))
@@ -319,7 +337,7 @@ public class PdfServiceImpl implements PdfService {
         Table table = new Table(UnitValue.createPointArray(columnWidths));
         table.setWidth(UnitValue.createPercentValue(100));
 
-        String[] headers = {"Наименование", "Кол-во", "Цена", "Маржинальность", "НДС", "Итого MDL"};
+        String[] headers = {"Наименование", "Кол-во", "Цена", "Маржинальность", "НДС / ШТ", "Итого MDL"};
         for (String header : headers) {
             Cell cell = new Cell()
                     .add(new Paragraph(header).setFont(font).setFontSize(9))
@@ -357,21 +375,20 @@ public class PdfServiceImpl implements PdfService {
         table.addCell(createDataCell(font, item.getTotalPrice().toString(), bgColor, border, 8, TextAlignment.RIGHT));
     }
 
-
-
-            private PdfFont getPdfFont() {
-                try (InputStream is = getClass().getResourceAsStream("/fonts/FreeSans.ttf")) {
-                    if (is == null) {
-                        log.error("Критическая ошибка: Файл шрифта FreeSans.ttf не найден в classpath по пути '/fonts/FreeSans.ttf'");
-                        throw new RuntimeException("Шрифт для PDF не найден. Пожалуйста, проверьте наличие файла в resources.");
-                    }
-                    byte[] fontBytes = IOUtils.toByteArray(is);
-                    return PdfFontFactory.createFont(fontBytes, PdfEncodings.IDENTITY_H);
-                } catch (Exception e) {
-                    log.error("Ошибка загрузки или создания шрифта из resources", e);
-                    throw new RuntimeException("Не удалось загрузить шрифт для генерации PDF", e);
-                }
+    private PdfFont getPdfFont() {
+        try (InputStream is = getClass().getResourceAsStream("/fonts/freesans.ttf")) {
+            if (is == null) {
+                log.error("Critical error: Font file DejaVuSans.ttf not found in classpath at '/fonts/DejaVuSans.ttf'");
+                throw new RuntimeException("Font for PDF not found. Please ensure your font is in src/main/resources/fonts/");
             }
+            byte[] fontBytes = IOUtils.toByteArray(is);
+            return PdfFontFactory.createFont(fontBytes, PdfEncodings.IDENTITY_H);
+        } catch (Exception e) {
+            log.error("Error loading or creating font from resources", e);
+            throw new RuntimeException("Failed to load font for PDF generation", e);
+        }
+    }
+
 
 
 

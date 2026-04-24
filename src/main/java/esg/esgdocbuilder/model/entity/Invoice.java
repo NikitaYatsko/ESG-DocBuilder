@@ -31,6 +31,9 @@ public class Invoice {
     @Column(name = "sum_amount", nullable = false)
     private BigDecimal sumAmount;
 
+    @Column(name = "discount_percent", nullable = false)
+    private BigDecimal discountPercent = BigDecimal.ZERO;
+
     @Column(name = "sum_marginality", nullable = false)
     private BigDecimal sumMarginality;
 

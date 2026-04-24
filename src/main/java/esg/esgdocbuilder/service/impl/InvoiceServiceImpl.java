@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -43,6 +44,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setVatAmount(invoiceRequest.getVat_amount());
         invoice.setSumAmount(invoiceRequest.getSum());
         invoice.setSumMarginality(invoiceRequest.getSumMarginality());
+        invoice.setDiscountPercent(invoiceRequest.getDiscountPercent() != null
+                ? invoiceRequest.getDiscountPercent() : BigDecimal.ZERO);
 
         Invoice savedInvoice = invoiceRepository.save(invoice);
 
@@ -85,6 +88,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setVatAmount(invoiceRequest.getVat_amount());
         invoice.setSumAmount(invoiceRequest.getSum());
         invoice.setSumMarginality(invoiceRequest.getSumMarginality());
+        invoice.setDiscountPercent(invoiceRequest.getDiscountPercent() != null
+                ? invoiceRequest.getDiscountPercent() : BigDecimal.ZERO);
 
         itemService.deleteByInvoiceId(id);
 

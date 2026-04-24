@@ -16,5 +16,6 @@ public class InvoiceTitleResponse {
     private BigDecimal totalAmount;
     private BigDecimal vat_amount;
     private BigDecimal sumMarginality;
+    private BigDecimal discountPercent;
     private BigDecimal sum;
 }
