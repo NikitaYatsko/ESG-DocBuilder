@@ -10,6 +10,7 @@ import java.util.List;
 public class InvoiceItemResponse {
     private Long id;
     private Long productId;
+
     private String nameProduct;
     private BigDecimal quantity;
     private BigDecimal unitPrice;

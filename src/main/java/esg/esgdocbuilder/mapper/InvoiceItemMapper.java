@@ -17,6 +17,7 @@ public class InvoiceItemMapper {
         InvoiceItemResponse response = new InvoiceItemResponse();
         response.setId(item.getId());
         response.setProductId(item.getProduct().getId());
+
         response.setNameProduct(item.getProduct().getName());
         response.setQuantity(item.getQuantity());
         response.setUnitPrice(item.getUnitPrice());
