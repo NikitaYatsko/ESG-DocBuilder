@@ -23,8 +23,10 @@ public class ProductMapper {
         response.setSellPrice(product.getSellPrice());
         response.setMarginality(product.getMarginality());
         response.setVat(product.getVat());
+        response.setDeleted(product.getIsDeleted());
         response.setCreatedAt(product.getCreatedAt());
         response.setTypeOfUnit(product.getTypeOfUnit());
+
 
 
         return response;

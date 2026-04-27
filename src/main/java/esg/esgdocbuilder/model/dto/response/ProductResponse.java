@@ -19,4 +19,5 @@ public class ProductResponse {
     private BigDecimal vat;
     private LocalDateTime createdAt;
     private TypeOfUnitEnum typeOfUnit;
+    private boolean isDeleted;
 }
