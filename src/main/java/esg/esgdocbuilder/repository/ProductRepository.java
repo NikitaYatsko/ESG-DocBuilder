@@ -26,8 +26,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             select p
             from Product p
             join p.category c 
-            where lower(p.name) like lower(concat('%', :query, '%'))
-               or lower(c.name) like lower(concat('%', :query, '%'))
+            where p.isDeleted = false and(
+                  lower(p.name) like lower(concat('%', :query, '%'))
+               or lower(c.name) like lower(concat('%', :query, '%')))
             """)
     Page<Product> searchProducts(@Param("query") String query, Pageable pageable);
 }
