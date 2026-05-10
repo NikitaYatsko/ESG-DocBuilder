@@ -16,11 +16,11 @@ import esg.esgdocbuilder.repository.BankOperationRepository;
 import esg.esgdocbuilder.service.BankOperationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -78,6 +78,13 @@ public class BankOperationServiceImpl implements BankOperationService {
         BankOperation operation = bankOperationRepository.findById(id).orElseThrow(
                 () -> new BankOperationNotFoundException(ApiErrorMessage.ACCOUNT_NOT_FOUND.getMessage())
         );
+        BigDecimal amount = operation.getAmount();
+        Account account = operation.getAccount();
+        if (operation.getType() == TypeOfOperationEnums.INCOME) {
+            account.setBalance(account.getBalance().subtract(amount));
+        } else if (operation.getType() == TypeOfOperationEnums.EXPENSE) {
+            account.setBalance(account.getBalance().add(operation.getAmount()));
+        }
         operation.setDeleted(true);
 
     }
