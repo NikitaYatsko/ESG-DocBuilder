@@ -246,7 +246,7 @@ public class PdfServiceImpl implements PdfService {
     }
 
     private Table createHeaderTable(PdfFont font, InvoiceResponse invoice) throws Exception {
-        Table headerTable = new Table(UnitValue.createPercentArray(new float[]{50, 30, 30}));
+        Table headerTable = new Table(UnitValue.createPercentArray(new float[]{50, 30, 60}));
         headerTable.setWidth(UnitValue.createPercentValue(100));
         headerTable.setMarginBottom(5);
 
@@ -272,8 +272,8 @@ public class PdfServiceImpl implements PdfService {
 
         Cell spacerCell = new Cell().setBorder(Border.NO_BORDER).setPadding(0);
         headerTable.addCell(spacerCell);
-
-        int fontSize = 9;
+        
+        int fontSize = 8;
         String dateStr = DATE_FORMAT.format(
                 Date.from(invoice.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant())
         );
@@ -289,18 +289,31 @@ public class PdfServiceImpl implements PdfService {
                 .setPaddingBottom(4)
                 .setTextAlignment(TextAlignment.LEFT);
 
-        infoCell.add(new Paragraph("Дата: " + dateStr)
-                .setFont(font).setFontSize(fontSize).setMargin(0));
-        infoCell.add(new Paragraph(" ")
-                .setFontSize(2).setMargin(0));
-        infoCell.add(new Paragraph("Телефон: 067252000")
-                .setFont(font).setFontSize(fontSize).setMargin(0));
-        infoCell.add(new Paragraph("Телефон: 067600640")
-                .setFont(font).setFontSize(fontSize).setMargin(0));
-        infoCell.add(new Paragraph("Емаил: info@solution.md")
-                .setFont(font).setFontSize(fontSize).setMargin(0));
-        infoCell.add(new Paragraph("Сайт: www.solution.md")
-                .setFont(font).setFontSize(fontSize).setMargin(0));
+        infoCell.add(new Paragraph("ENERGY SOLUTION GROUP SRL ")
+                .setFont(font).setFontSize(fontSize).setMargin(0).setMultipliedLeading(1.0f));
+        infoCell.add(new Paragraph("c.f: 1022602001390 ")
+                .setFont(font).setFontSize(fontSize).setMargin(0).setMultipliedLeading(1.0f));
+        infoCell.add(new Paragraph("Adresa: Aerodromului 10, Balti ")
+                .setFont(font).setFontSize(fontSize).setMargin(0).setMultipliedLeading(1.0f));
+        infoCell.add(new Paragraph("IBAN MD96AG000000022514765369 AGRNMD2X750 ")
+                .setFont(font).setFontSize(fontSize).setMargin(0).setMultipliedLeading(1.0f));
+        infoCell.add(new Paragraph("TVA: 1203281 ")
+                .setFont(font).setFontSize(fontSize).setMargin(0).setMultipliedLeading(1.0f));
+        infoCell.add(new Paragraph("B.C. MAIB S.A Administrator: Iațco Andrei ")
+                .setFont(font).setFontSize(fontSize).setMargin(0).setMultipliedLeading(1.0f));
+        infoCell.add(new Paragraph("  \n")
+                .setFont(font).setFontSize(fontSize).setMargin(0).setMultipliedLeading(1.0f));
+        infoCell.add(new Paragraph("Office: or. Balti  str Aerodromului 10 ")
+                .setFont(font).setFontSize(fontSize).setMargin(0).setMultipliedLeading(1.0f));
+        infoCell.add(new Paragraph("Depozit: or. Balti str Stefan cel Mare 128 ")
+                .setFont(font).setFontSize(fontSize).setMargin(0).setMultipliedLeading(1.0f));
+        infoCell.add(new Paragraph("tel: 067252000 / 067600640 ")
+                .setFont(font).setFontSize(fontSize).setMargin(0).setMultipliedLeading(1.0f));
+        infoCell.add(new Paragraph("email: info@solution.md ")
+                .setFont(font).setFontSize(fontSize).setMargin(0).setMultipliedLeading(1.0f));
+        infoCell.add(new Paragraph("web: https://solution.md/ ")
+                .setFont(font).setFontSize(fontSize).setMargin(0).setMultipliedLeading(1.0f));
+
 
         infoBoxTable.addCell(infoCell);
 
