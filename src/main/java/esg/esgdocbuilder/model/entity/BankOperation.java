@@ -36,4 +36,8 @@ public class BankOperation {
     @Column(name = "is_deleted",nullable = false)
     private boolean isDeleted;
 
+    @ManyToOne
+    @JoinColumn(name = "id_categories")
+    private BankingCategory category;
+
 }
