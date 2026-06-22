@@ -20,7 +20,8 @@ public class BankingCategoryServiceImpl {
 
     public BankCategoryResponse create(NewBankCategoryRequest request) {
         BankingCategory category = mapper.toEntity(request);
-        return mapper.toResponse(repository.save(category));
+        repository.save(category);
+        return mapper.toResponse(category);
     }
 
     public List<BankCategoryResponse> getAll() {
