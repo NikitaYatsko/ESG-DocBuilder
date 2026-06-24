@@ -2,9 +2,12 @@ package esg.esgdocbuilder.mapper;
 
 import esg.esgdocbuilder.model.dto.AccountDTO;
 import esg.esgdocbuilder.model.dto.request.BankOperationRequest;
+import esg.esgdocbuilder.model.dto.request.NewBankCategoryRequest;
+import esg.esgdocbuilder.model.dto.response.BankCategoryResponse;
 import esg.esgdocbuilder.model.dto.response.BankOperationResponse;
 import esg.esgdocbuilder.model.entity.Account;
 import esg.esgdocbuilder.model.entity.BankOperation;
+import esg.esgdocbuilder.model.entity.BankingCategory;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -34,5 +37,18 @@ public class BankOperationMapper {
                 .name(account.getName())
                 .balance(account.getBalance())
                 .build();
+    }
+
+    public BankingCategory toEntity(NewBankCategoryRequest request) {
+        BankingCategory category = new BankingCategory();
+        category.setName(request.getName());
+        return category;
+    }
+
+    public BankCategoryResponse toResponse(BankingCategory category) {
+        BankCategoryResponse response = new BankCategoryResponse();
+        response.setId(category.getId());
+        response.setName(category.getName());
+        return response;
     }
 }
