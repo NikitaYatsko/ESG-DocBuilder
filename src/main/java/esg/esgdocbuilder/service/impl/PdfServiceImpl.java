@@ -136,6 +136,7 @@ public class PdfServiceImpl implements PdfService {
             document.add(title);
 
             List<InvoiceItemResponse> items = invoice.getItems();
+            items.sort((a, b) -> b.getUnitPrice().compareTo(a.getUnitPrice()));
             if (!items.isEmpty()) {
                 Table table = createClientTable(font);
                 boolean isEvenRow = false;
@@ -150,17 +151,16 @@ public class PdfServiceImpl implements PdfService {
             BigDecimal totalAmount = invoice.getSum() != null ? invoice.getSum() : BigDecimal.ZERO;
             BigDecimal discountPercent = invoice.getDiscountPercent() != null ? invoice.getDiscountPercent() : BigDecimal.ZERO;
 
-            boolean hasDiscount = discountPercent.compareTo(BigDecimal.ZERO) > 0;
-            float[] columnWidths = hasDiscount ? new float[]{40, 20, 40} : new float[]{45, 55};
-            Table totalTable = new Table(UnitValue.createPercentArray(columnWidths));
+            Table totalTable = new Table(UnitValue.createPercentArray(new float[]{100}));
             totalTable.setWidth(UnitValue.createPercentValue(100));
             totalTable.setMarginTop(5);
 
-            addTotalCell(totalTable, font, "Итого НДС: " + totalVat + " MDL");
-            if (hasDiscount) {
-                addTotalCell(totalTable, font, "Скидка: " + discountPercent + "%");
+            addTotalRow(totalTable, font, "Итого: " + totalAmount + " MDL");
+            addTotalRow(totalTable, font, "В том числе НДС: " + totalVat + " MDL");
+            if (discountPercent.compareTo(BigDecimal.ZERO) > 0) {
+                addTotalRow(totalTable, font, "Скидка: " + discountPercent + "%");
             }
-            addTotalCell(totalTable, font, "Итого (СЭС): " + totalAmount + " MDL");
+            addTotalRow(totalTable, font, "Всего к оплате: " + totalAmount + " MDL");
 
             document.add(totalTable);
             document.close();
@@ -198,6 +198,7 @@ public class PdfServiceImpl implements PdfService {
             document.add(title);
 
             List<InvoiceItemResponse> items = invoice.getItems();
+            items.sort((a, b) -> b.getUnitPrice().compareTo(a.getUnitPrice()));
             if (!items.isEmpty()) {
                 Table table = createInternalTable(font);
                 boolean isEvenRow = false;
@@ -213,25 +214,16 @@ public class PdfServiceImpl implements PdfService {
             BigDecimal totalMarginality = invoice.getSumMarginality() != null ? invoice.getSumMarginality() : BigDecimal.ZERO;
             BigDecimal discountPercent = invoice.getDiscountPercent() != null ? invoice.getDiscountPercent() : BigDecimal.ZERO;
 
-            boolean hasDiscount = discountPercent.compareTo(BigDecimal.ZERO) > 0;
-
-            float[] columnWidths;
-            if (hasDiscount) {
-                columnWidths = new float[]{25, 15, 30, 30};
-            } else {
-                columnWidths = new float[]{30, 35, 35};
-            }
-
-            Table totalTable = new Table(UnitValue.createPercentArray(columnWidths));
+            Table totalTable = new Table(UnitValue.createPercentArray(new float[]{100}));
             totalTable.setWidth(UnitValue.createPercentValue(100));
             totalTable.setMarginTop(5);
 
-            addTotalCell(totalTable, font, "Итого НДС: " + totalVat + " MDL");
-            if (hasDiscount) {
-                addTotalCell(totalTable, font, "Скидка: " + discountPercent + "%");
+            addTotalRow(totalTable, font, "Итого НДС: " + totalVat + " MDL");
+            if (discountPercent.compareTo(BigDecimal.ZERO) > 0) {
+                addTotalRow(totalTable, font, "Скидка: " + discountPercent + "%");
             }
-            addTotalCell(totalTable, font, "Итого СЭС: " + totalAmount + " MDL");
-            addTotalCell(totalTable, font, "Итого Маржинальность: " + totalMarginality + " MDL");
+            addTotalRow(totalTable, font, "Итого СЭС: " + totalAmount + " MDL");
+            addTotalRow(totalTable, font, "Итого Маржинальность: " + totalMarginality + " MDL");
 
             totalTable.setKeepTogether(true);
             document.add(totalTable);
@@ -415,12 +407,15 @@ public class PdfServiceImpl implements PdfService {
                 .setPadding(2);
     }
 
-    private void addTotalCell(Table table, PdfFont font, String text) {
-        Paragraph paragraph = new Paragraph(text).setFont(font).setFontSize(8).setTextAlignment(TextAlignment.RIGHT).setMargin(0);
+    private void addTotalRow(Table table, PdfFont font, String text) {
+        Paragraph paragraph = new Paragraph(text)
+                .setFont(font)
+                .setFontSize(10)
+                .setBold()
+                .setTextAlignment(TextAlignment.RIGHT)
+                .setMargin(0);
         Cell cell = new Cell().add(paragraph)
-                .setBackgroundColor(TOTAL_BG_COLOR)
-                .setBorder(new SolidBorder(BORDER_COLOR, 0.5f))
-                .setPadding(3)
+                .setBorder(Border.NO_BORDER)
                 .setTextAlignment(TextAlignment.RIGHT);
         table.addCell(cell);
     }
