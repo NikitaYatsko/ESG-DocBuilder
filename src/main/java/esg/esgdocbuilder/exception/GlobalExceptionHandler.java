@@ -38,6 +38,7 @@ public class GlobalExceptionHandler {
             RefreshTokenNotFoundException.class,
             AccountNotFoundException.class,
             BankOperationNotFoundException.class,
+            BankCategoryNotFound.class
     })
     public ResponseEntity<ErrorResponse> handleNotFound(RuntimeException ex) {
         return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
