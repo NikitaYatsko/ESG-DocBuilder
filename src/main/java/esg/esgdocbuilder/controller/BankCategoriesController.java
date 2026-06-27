@@ -19,25 +19,21 @@ public class BankCategoriesController {
 
     @GetMapping
     public ResponseEntity<List<BankCategoryResponse>> getBankCategories() {
-        log.info("Getting bank categories");
         return ResponseEntity.ok(bankingCategoryService.getAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BankCategoryResponse> getBankCategoryById(@PathVariable Long id) {
-        log.info("Getting bank category with id: {}", id);
         return ResponseEntity.ok(bankingCategoryService.getById(id));
     }
 
     @PostMapping
     public ResponseEntity<BankCategoryResponse> createNewBankCategory(@RequestBody NewBankCategoryRequest request) {
-        log.info("Creating new bank category: {}", request);
         return ResponseEntity.ok(bankingCategoryService.create(request));
     }
 
     @PutMapping({"/{id}"})
     public ResponseEntity<BankCategoryResponse> updateBankCategory(@RequestBody NewBankCategoryRequest request, @PathVariable Long id) {
-        log.info("Updating bank category {}", request);
         return ResponseEntity.ok(bankingCategoryService.update(id, request));
     }
 
