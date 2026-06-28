@@ -163,8 +163,9 @@ public class PdfServiceImpl implements PdfService {
             Table totalTable = new Table(UnitValue.createPercentArray(new float[]{100}));
             totalTable.setWidth(UnitValue.createPercentValue(100));
             totalTable.setMarginTop(5);
-
-            addTotalRow(totalTable, font, "Итого: " + totalSum + " MDL");
+            if (discountPercent.compareTo(BigDecimal.ZERO) > 0) {
+                addTotalRow(totalTable, font, "Итого: " + totalSum + " MDL");
+            }
             addTotalRow(totalTable, font, "В том числе НДС: " + totalVat + " MDL");
             if (discountPercent.compareTo(BigDecimal.ZERO) > 0) {
                 addTotalRow(totalTable, font, "Скидка: " + discountPercent + "%");
@@ -231,8 +232,9 @@ public class PdfServiceImpl implements PdfService {
             Table totalTable = new Table(UnitValue.createPercentArray(new float[]{100}));
             totalTable.setWidth(UnitValue.createPercentValue(100));
             totalTable.setMarginTop(5);
-
-            addTotalRow(totalTable, font, "Итого НДС: " + totalVat + " MDL");
+            if (discountPercent.compareTo(BigDecimal.ZERO) > 0) {
+                addTotalRow(totalTable, font, "Итого НДС: " + totalVat + " MDL");
+            }
             if (discountPercent.compareTo(BigDecimal.ZERO) > 0) {
                 addTotalRow(totalTable, font, "Скидка: " + discountPercent + "%");
             }
