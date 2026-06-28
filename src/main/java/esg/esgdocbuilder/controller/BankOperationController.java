@@ -53,4 +53,7 @@ public class BankOperationController {
         bankOperationService.deleteOperation(id);
         return ResponseEntity.noContent().build();
     }
+
+
+
 }

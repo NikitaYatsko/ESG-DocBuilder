@@ -137,6 +137,11 @@ public class PdfServiceImpl implements PdfService {
 
             List<InvoiceItemResponse> items = invoice.getItems();
             items.sort((a, b) -> b.getUnitPrice().compareTo(a.getUnitPrice()));
+
+            BigDecimal totalSum = items.stream()
+                    .map(InvoiceItemResponse::getTotalPrice)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
             if (!items.isEmpty()) {
                 Table table = createClientTable(font);
                 boolean isEvenRow = false;
@@ -148,14 +153,19 @@ public class PdfServiceImpl implements PdfService {
             }
 
             BigDecimal totalVat = invoice.getVat_amount() != null ? invoice.getVat_amount() : BigDecimal.ZERO;
+            
+
+
+
             BigDecimal totalAmount = invoice.getSum() != null ? invoice.getSum() : BigDecimal.ZERO;
             BigDecimal discountPercent = invoice.getDiscountPercent() != null ? invoice.getDiscountPercent() : BigDecimal.ZERO;
 
             Table totalTable = new Table(UnitValue.createPercentArray(new float[]{100}));
             totalTable.setWidth(UnitValue.createPercentValue(100));
             totalTable.setMarginTop(5);
-
-            addTotalRow(totalTable, font, "Итого: " + totalAmount + " MDL");
+            if (discountPercent.compareTo(BigDecimal.ZERO) > 0) {
+                addTotalRow(totalTable, font, "Итого: " + totalSum + " MDL");
+            }
             addTotalRow(totalTable, font, "В том числе НДС: " + totalVat + " MDL");
             if (discountPercent.compareTo(BigDecimal.ZERO) > 0) {
                 addTotalRow(totalTable, font, "Скидка: " + discountPercent + "%");
@@ -199,6 +209,11 @@ public class PdfServiceImpl implements PdfService {
 
             List<InvoiceItemResponse> items = invoice.getItems();
             items.sort((a, b) -> b.getUnitPrice().compareTo(a.getUnitPrice()));
+
+            BigDecimal totalSum = items.stream()
+                    .map(InvoiceItemResponse::getTotalPrice)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
             if (!items.isEmpty()) {
                 Table table = createInternalTable(font);
                 boolean isEvenRow = false;
@@ -217,8 +232,9 @@ public class PdfServiceImpl implements PdfService {
             Table totalTable = new Table(UnitValue.createPercentArray(new float[]{100}));
             totalTable.setWidth(UnitValue.createPercentValue(100));
             totalTable.setMarginTop(5);
-
-            addTotalRow(totalTable, font, "Итого НДС: " + totalVat + " MDL");
+            if (discountPercent.compareTo(BigDecimal.ZERO) > 0) {
+                addTotalRow(totalTable, font, "Итого НДС: " + totalVat + " MDL");
+            }
             if (discountPercent.compareTo(BigDecimal.ZERO) > 0) {
                 addTotalRow(totalTable, font, "Скидка: " + discountPercent + "%");
             }
