@@ -21,6 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -52,8 +54,52 @@ public class BankOperationServiceImpl implements BankOperationService {
 
     @Override
     public PaginationResponse<BankOperationResponse> getAllOperations(Pageable pageable) {
-        Page<BankOperation> bankOperations = bankOperationRepository.findAllByIsDeletedFalse(pageable);
-        Page<BankOperationResponse> dtos = bankOperations.map(bankOperationMapper::toResponse);
+
+        Page<BankOperation> operations =
+                bankOperationRepository.findAllByIsDeletedFalse(pageable);
+
+        Page<BankOperationResponse> dtos =
+                operations.map(bankOperationMapper::toResponse);
+
+        return buildResponse(dtos, pageable);
+    }
+
+    @Override
+    public PaginationResponse<BankOperationResponse> getAllOperations(
+            Pageable pageable,
+            LocalDate from,
+            LocalDate to
+    ) {
+
+        LocalDateTime start = (from != null) ? from.atStartOfDay() : null;
+        LocalDateTime end = (to != null) ? to.atTime(23, 59, 59) : null;
+
+        Page<BankOperation> bankOperations;
+
+        if (start != null && end != null) {
+
+            if (start.isAfter(end)) {
+                throw new IllegalArgumentException("from date cannot be after to date");
+            }
+
+            bankOperations = bankOperationRepository
+                    .findByIsDeletedFalseAndCreatedAtBetween(start, end, pageable);
+
+        } else {
+            bankOperations = bankOperationRepository
+                    .findAllByIsDeletedFalse(pageable);
+        }
+
+        Page<BankOperationResponse> dtos =
+                bankOperations.map(bankOperationMapper::toResponse);
+
+        return buildResponse(dtos, pageable);
+    }
+
+    private PaginationResponse<BankOperationResponse> buildResponse(
+            Page<BankOperationResponse> dtos,
+            Pageable pageable
+    ) {
         return new PaginationResponse<>(
                 dtos.getContent(),
                 new PaginationResponse.Pagination(
@@ -61,9 +107,31 @@ public class BankOperationServiceImpl implements BankOperationService {
                         pageable.getPageSize(),
                         dtos.getNumber() + 1,
                         dtos.getTotalPages()
-
                 )
         );
+    }
+
+    @Override
+    public PaginationResponse<BankOperationResponse> getAllOperations(
+            Pageable pageable,
+            LocalDateTime from,
+            LocalDateTime to
+    ) {
+
+        Page<BankOperation> bankOperations;
+
+        if (from != null && to != null) {
+            bankOperations = bankOperationRepository
+                    .findByIsDeletedFalseAndCreatedAtBetween(from, to, pageable);
+        } else {
+            bankOperations = bankOperationRepository
+                    .findAllByIsDeletedFalse(pageable);
+        }
+
+        Page<BankOperationResponse> dtos =
+                bankOperations.map(bankOperationMapper::toResponse);
+
+        return buildResponse(dtos, pageable);
     }
 
     @Override
