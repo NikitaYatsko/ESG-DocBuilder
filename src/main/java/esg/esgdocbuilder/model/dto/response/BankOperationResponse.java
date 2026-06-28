@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Data
 public class BankOperationResponse {
     private Long id;
+    private String category;
     private TypeOfOperationEnums type;
     private BigDecimal amount;
     private String accountName;

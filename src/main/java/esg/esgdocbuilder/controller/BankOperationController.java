@@ -39,7 +39,7 @@ public class BankOperationController {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
         return ResponseEntity.ok(
-                bankOperationService.getAllOperations(pageable, from, to)
+                bankOperationService.getAllOperationsFiltered(pageable, from, to)
         );
     }
 

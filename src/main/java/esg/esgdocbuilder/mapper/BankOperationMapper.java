@@ -16,6 +16,7 @@ public class BankOperationMapper {
         return BankOperationResponse.builder()
                 .id(bankOperation.getId())
                 .type(bankOperation.getType())
+                .category(bankOperation.getCategory().getName())
                 .amount(bankOperation.getAmount())
                 .accountName(bankOperation.getAccount().getName())
                 .comment(bankOperation.getComment())
@@ -23,10 +24,11 @@ public class BankOperationMapper {
                 .build();
     }
 
-    public BankOperation toEntity(BankOperationRequest bankOperationRequest, Account account) {
+    public BankOperation toEntity(BankingCategory category, BankOperationRequest bankOperationRequest, Account account) {
         return BankOperation.builder()
                 .type(bankOperationRequest.getType())
                 .amount(bankOperationRequest.getAmount())
+                .category(category)
                 .account(account)
                 .comment(bankOperationRequest.getComment())
                 .build();

@@ -3,6 +3,7 @@ package esg.esgdocbuilder.service.impl;
 import esg.esgdocbuilder.constants.ApiErrorMessage;
 import esg.esgdocbuilder.exception.exceptions.AccountNotFoundException;
 import esg.esgdocbuilder.exception.exceptions.BankOperationNotFoundException;
+import esg.esgdocbuilder.exception.exceptions.CategoryNotFoundException;
 import esg.esgdocbuilder.mapper.BankOperationMapper;
 import esg.esgdocbuilder.model.dto.AccountDTO;
 import esg.esgdocbuilder.model.dto.request.BankOperationRequest;
@@ -10,9 +11,11 @@ import esg.esgdocbuilder.model.dto.response.BankOperationResponse;
 import esg.esgdocbuilder.model.dto.response.PaginationResponse;
 import esg.esgdocbuilder.model.entity.Account;
 import esg.esgdocbuilder.model.entity.BankOperation;
+import esg.esgdocbuilder.model.entity.BankingCategory;
 import esg.esgdocbuilder.model.enums.TypeOfOperationEnums;
 import esg.esgdocbuilder.repository.AccountRepository;
 import esg.esgdocbuilder.repository.BankOperationRepository;
+import esg.esgdocbuilder.repository.BankingCategoryRepository;
 import esg.esgdocbuilder.service.BankOperationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,13 +36,19 @@ public class BankOperationServiceImpl implements BankOperationService {
     private final BankOperationRepository bankOperationRepository;
     private final BankOperationMapper bankOperationMapper;
     private final AccountRepository accountRepository;
+    private final BankingCategoryRepository bankingCategoryRepository;
 
+    @Transactional
     @Override
     public BankOperationResponse createOperation(BankOperationRequest bankOperationRequest) {
         Account account = accountRepository.findByName(bankOperationRequest.getAccountName())
                 .orElseThrow(() -> new AccountNotFoundException(ApiErrorMessage.ACCOUNT_NOT_FOUND.getMessage()));
 
-        BankOperation bankOperation = bankOperationMapper.toEntity(bankOperationRequest, account);
+        BankingCategory category = bankingCategoryRepository.findById(bankOperationRequest.getCategoryId())
+                .orElseThrow(() -> new CategoryNotFoundException(ApiErrorMessage.CATEGORY_NOT_FOUND.getMessage()));
+
+
+        BankOperation bankOperation = bankOperationMapper.toEntity(category, bankOperationRequest, account);
 
         if (bankOperation.getType() == TypeOfOperationEnums.INCOME) {
             account.setBalance(account.getBalance().add(bankOperation.getAmount()));
@@ -65,20 +74,19 @@ public class BankOperationServiceImpl implements BankOperationService {
     }
 
     @Override
-    public PaginationResponse<BankOperationResponse> getAllOperations(
+    public PaginationResponse<BankOperationResponse> getAllOperationsFiltered(
             Pageable pageable,
             LocalDate from,
             LocalDate to
     ) {
 
-        LocalDateTime start = (from != null) ? from.atStartOfDay() : null;
-        LocalDateTime end = (to != null) ? to.atTime(23, 59, 59) : null;
-
         Page<BankOperation> bankOperations;
+        LocalDateTime start = from != null ? from.atStartOfDay() : null;
+        LocalDateTime end = to != null ? to.atTime(23, 59, 59) : null;
 
-        if (start != null && end != null) {
+        if (from != null && to != null) {
 
-            if (start.isAfter(end)) {
+            if (from.isAfter(to)) {
                 throw new IllegalArgumentException("from date cannot be after to date");
             }
 
@@ -111,28 +119,6 @@ public class BankOperationServiceImpl implements BankOperationService {
         );
     }
 
-    @Override
-    public PaginationResponse<BankOperationResponse> getAllOperations(
-            Pageable pageable,
-            LocalDateTime from,
-            LocalDateTime to
-    ) {
-
-        Page<BankOperation> bankOperations;
-
-        if (from != null && to != null) {
-            bankOperations = bankOperationRepository
-                    .findByIsDeletedFalseAndCreatedAtBetween(from, to, pageable);
-        } else {
-            bankOperations = bankOperationRepository
-                    .findAllByIsDeletedFalse(pageable);
-        }
-
-        Page<BankOperationResponse> dtos =
-                bankOperations.map(bankOperationMapper::toResponse);
-
-        return buildResponse(dtos, pageable);
-    }
 
     @Override
     public List<AccountDTO> getAllAccounts() {

@@ -16,16 +16,10 @@ public interface BankOperationService {
 
     PaginationResponse<BankOperationResponse> getAllOperations(Pageable pageable);
 
-    PaginationResponse<BankOperationResponse> getAllOperations(
+    PaginationResponse<BankOperationResponse> getAllOperationsFiltered(
             Pageable pageable,
             LocalDate from,
             LocalDate to
-    );
-
-    PaginationResponse<BankOperationResponse> getAllOperations(
-            Pageable pageable,
-            LocalDateTime from,
-            LocalDateTime to
     );
 
     List<AccountDTO> getAllAccounts();
