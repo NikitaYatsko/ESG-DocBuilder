@@ -12,6 +12,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -29,11 +31,16 @@ public class BankOperationController {
     @GetMapping("/operations")
     public ResponseEntity<PaginationResponse<BankOperationResponse>> getAllBankOperations(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size
-
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(required = false) LocalDate from,
+            @RequestParam(required = false) LocalDate to
     ) {
+
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        return ResponseEntity.ok(bankOperationService.getAllOperations(pageable));
+
+        return ResponseEntity.ok(
+                bankOperationService.getAllOperationsFiltered(pageable, from, to)
+        );
     }
 
     @PostMapping("/operations")

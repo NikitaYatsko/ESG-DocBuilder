@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 @Builder
 public class BankOperationRequest {
     private TypeOfOperationEnums type;
+    private Long categoryId;
     private BigDecimal amount;
     private String accountName;
     private String comment;

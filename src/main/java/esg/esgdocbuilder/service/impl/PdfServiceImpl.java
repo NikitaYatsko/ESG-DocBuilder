@@ -61,7 +61,7 @@ public class PdfServiceImpl implements PdfService {
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
 
-            
+
             PdfFont font = getPdfFont();
             document.setFont(font);
 
@@ -280,7 +280,7 @@ public class PdfServiceImpl implements PdfService {
 
         Cell spacerCell = new Cell().setBorder(Border.NO_BORDER).setPadding(0);
         headerTable.addCell(spacerCell);
-        
+
         int fontSize = 8;
         String dateStr = DATE_FORMAT.format(
                 Date.from(invoice.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant())
@@ -409,8 +409,6 @@ public class PdfServiceImpl implements PdfService {
             throw new RuntimeException("Failed to load font for PDF generation", e);
         }
     }
-
-
 
 
     private Cell createDataCell(PdfFont font, String text, Color bgColor, Border border, int fontSize, TextAlignment align) {
