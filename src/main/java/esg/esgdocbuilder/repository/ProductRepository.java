@@ -15,9 +15,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @EntityGraph(attributePaths = "category")
     Page<Product> findAllByIsDeletedFalse(Pageable pageable);
 
-
     Page<Product> findByCategoryId(Long categoryId, Pageable pageable);
-
 
     Page<Product> findByTypeOfUnit(TypeOfUnitEnum UnitId, Pageable pageable);
 
