@@ -25,4 +25,6 @@ public interface BankOperationService {
     List<AccountDTO> getAllAccounts();
 
     void deleteOperation(Long id);
+
+    List<BankOperationResponse> getOperationsForPeriod(LocalDate from, LocalDate to);
 }

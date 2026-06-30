@@ -44,6 +44,7 @@ public class BankOperationMapper {
     public BankingCategory toEntity(NewBankCategoryRequest request) {
         BankingCategory category = new BankingCategory();
         category.setName(request.getName());
+        category.setType(request.getType());
         return category;
     }
 
@@ -51,6 +52,7 @@ public class BankOperationMapper {
         BankCategoryResponse response = new BankCategoryResponse();
         response.setId(category.getId());
         response.setName(category.getName());
+        response.setType(category.getType());
         return response;
     }
 

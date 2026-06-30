@@ -6,4 +6,5 @@ import lombok.Data;
 public class BankCategoryResponse {
     private Long id;
     private String name;
+    private String type;
 }

@@ -27,6 +27,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -47,6 +48,12 @@ public class BankOperationServiceImpl implements BankOperationService {
         BankingCategory category = bankingCategoryRepository.findById(bankOperationRequest.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException(ApiErrorMessage.CATEGORY_NOT_FOUND.getMessage()));
 
+        if (!bankOperationRequest.getType().name().equals(category.getType())) {
+            throw new IllegalArgumentException(
+                    "Category type '" + category.getType() +
+                            "' does not match operation type '" + bankOperationRequest.getType() + "'"
+            );
+        }
 
         BankOperation bankOperation = bankOperationMapper.toEntity(category, bankOperationRequest, account);
 
@@ -143,5 +150,21 @@ public class BankOperationServiceImpl implements BankOperationService {
 
     }
 
+    @Override
+    public List<BankOperationResponse> getOperationsForPeriod(LocalDate from, LocalDate to) {
+        LocalDateTime start = from != null ? from.atStartOfDay() : null;
+        LocalDateTime end = to != null ? to.atTime(23, 59, 59) : null;
+
+        List<BankOperation> operations;
+        if (start != null && end != null) {
+            operations = bankOperationRepository.findByIsDeletedFalseAndCreatedAtBetween(start, end, Pageable.unpaged()).getContent();
+        } else {
+            operations = bankOperationRepository.findAllByIsDeletedFalse(Pageable.unpaged()).getContent();
+        }
+
+        return operations.stream()
+                .map(bankOperationMapper::toResponse)
+                .collect(Collectors.toList());
+    }
 
 }
