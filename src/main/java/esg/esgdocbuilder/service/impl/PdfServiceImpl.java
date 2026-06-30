@@ -136,7 +136,7 @@ public class PdfServiceImpl implements PdfService {
             document.add(title);
 
             List<InvoiceItemResponse> items = invoice.getItems();
-            items.sort((a, b) -> b.getUnitPrice().compareTo(a.getUnitPrice()));
+            items.sort((a, b) -> b.getTotalPrice().compareTo(a.getTotalPrice()));
 
             BigDecimal totalSum = items.stream()
                     .map(InvoiceItemResponse::getTotalPrice)
@@ -208,7 +208,7 @@ public class PdfServiceImpl implements PdfService {
             document.add(title);
 
             List<InvoiceItemResponse> items = invoice.getItems();
-            items.sort((a, b) -> b.getUnitPrice().compareTo(a.getUnitPrice()));
+            items.sort((a, b) -> b.getTotalPrice().compareTo(a.getTotalPrice()));
 
             BigDecimal totalSum = items.stream()
                     .map(InvoiceItemResponse::getTotalPrice)
