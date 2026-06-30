@@ -14,4 +14,7 @@ public class BankingCategory {
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
+
+    @Column(name = "type", nullable = false, length = 20)
+    private String type;
 }
