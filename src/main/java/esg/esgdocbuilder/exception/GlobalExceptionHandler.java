@@ -47,7 +47,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             UserAlreadyExistsException.class,
             PasswordDoNotMatchException.class,
-            FileIsEmptyException.class
+            FileIsEmptyException.class,
+            InvalidResetTokenException.class
     })
     public ResponseEntity<ErrorResponse> handleBadRequest(RuntimeException ex) {
         return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
